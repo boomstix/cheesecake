@@ -26,6 +26,8 @@
 	}
 	$(function () {
 
+		$('.frame-holder').hide().css('visibility', 'visible').fadeIn();
+
 		var can_upload = false;
 
 		// clear error css class when entering text

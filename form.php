@@ -253,7 +253,7 @@ else :
 								<div class="five offset-by-one columns">
 									<div class="row form-elem">
 										<!--upload img-->
-										<div class="frame-holder<?= $img_landscape ? ' horz' : ' vert' ?><?= (strlen($img_err) > 0) ? ' error' : '' ?>">
+										<div class="frame-holder<?= $img_landscape ? ' horz' : ' vert' ?><?= (strlen($img_err) > 0) ? ' error' : '' ?>" style="visibility:hidden;">
 											<input type="file" id="upload_image" name="upload_image" title="" class="frame frame-layer" />
 											<div class="frame text-layer"><?= strlen($img_err) > 0 ? $img_err : $img_msg ?></div>
 											<div class="frame opacity-layer"></div>

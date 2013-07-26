@@ -44,8 +44,39 @@ if (isset($_SESSION['logged_in'])) {
 			// grab the highest voted entries
 		
 			$sql_str = (strlen($search_term) == 0)
-			? "SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid` FROM `register` r WHERE !(is_approved is null) ORDER BY vote_count DESC, battle_count DESC, created_at ASC LIMIT 100;"
-			: "SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid` FROM `register` r WHERE !(is_approved is null) and (first_name like concat('%', '$search_term', '%') OR last_name like concat('%', '$search_term', '%') OR dads_name like concat('%', '$search_term', '%') OR your_email like concat('%', '$search_term', '%')) ORDER BY vote_count DESC, battle_count DESC, created_at ASC LIMIT 100;"
+			? "
+SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, (`vote_count` / `ratio`) as `ratio`
+FROM `register` r
+INNER JOIN (
+	SELECT registered_id, AVG(calc.ratio) AS ratio
+	FROM (
+		SELECT registered_id, sum(vote_count) AS ratio
+		FROM vote_log
+		GROUP BY registered_id, ip_address
+	) AS calc
+	GROUP BY registered_id
+) AS v ON v.registered_id = r.id
+WHERE !(is_approved IS NULL)
+ORDER BY vote_count DESC, ratio DESC, battle_count DESC, created_at ASC
+LIMIT 20;
+"
+			: "
+SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, (`vote_count` / `ratio`) as `ratio`
+FROM `register` r
+INNER JOIN (
+	SELECT registered_id, AVG(calc.ratio) AS ratio
+	FROM (
+		SELECT registered_id, sum(vote_count) AS ratio
+		FROM vote_log
+		GROUP BY registered_id, ip_address
+	) AS calc
+	GROUP BY registered_id
+) AS v ON v.registered_id = r.id
+WHERE !(is_approved IS NULL)
+AND (first_name like concat('%', '$search_term', '%') OR last_name like concat('%', '$search_term', '%') OR dads_name like concat('%', '$search_term', '%') OR your_email like concat('%', '$search_term', '%'))
+ORDER BY vote_count DESC, ratio DESC, battle_count DESC, created_at ASC
+LIMIT 20;
+;"
 			;
 			$stmt = $conn->prepare($sql_str);
 			$stmt->setFetchMode(PDO::FETCH_BOTH);
@@ -120,6 +151,7 @@ else :
 		<th>Email</th>
 		<th>Battles</th>
 		<th>Score</th>
+		<th>Confidence</th>
 	</tr>
 </thead>
 <tbody><?
@@ -129,7 +161,8 @@ else :
 		<td><?= $data['contact_number'] ?></td>
 		<td><?= $data['your_email'] ?></td>
 		<td class="text-center"><?= $data['battle_count'] ?></td>
-		<td class="text-center"><?= $data['vote_count'] ?></td>
+		<td class="text-center"><strong><?= $data['vote_count'] ?></strong></td>
+		<td class="text-center"><?= round($data['ratio'] * 100, 3) ?>%</td>
 	</tr><?
 	endforeach;
 	?>
