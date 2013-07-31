@@ -125,7 +125,7 @@ try {
 		// grab two random entries from register table
 		
 		// dad 1
-		$stmt = $conn->prepare("SELECT r.`id`, `dads_name`, `img_guid` FROM `register` r JOIN (SELECT round(MAX(`ID`)*RAND()) AS `ID` FROM `register` where `is_approved` = 1) AS x ON r.ID >= x.ID LIMIT 1;");
+		$stmt = $conn->prepare("SELECT v.`id`, `dads_name`, `img_guid` FROM `register` v JOIN ( SELECT `register_id` FROM `approved` a JOIN (SELECT (RAND() * (SELECT MAX(id) FROM approved)) AS id) AS r WHERE a.id >= r.id LIMIT 1 ) as x WHERE v.id = x.register_id;");
 		$stmt->setFetchMode(PDO::FETCH_BOTH);
 		
 		if (!$stmt->execute())
@@ -135,19 +135,26 @@ try {
 		}
 		else {
 			$dad1_datarow = $stmt->fetch();
+			$dad1 = $dad1_datarow['id'];
 		}
-		
-		// dad 2
-		$stmt = $conn->prepare("SELECT r.`id`, `dads_name`, `img_guid` FROM `register` r JOIN (SELECT round(MAX(`ID`)*RAND()) AS `ID` FROM `register` where `is_approved` = 1 and id != " . $dad1_datarow['id'] . ") AS x ON r.ID >= x.ID  where r.`is_approved` = 1 and r.id != " . $dad1_datarow['id'] . " LIMIT 1;");
-		$stmt->setFetchMode(PDO::FETCH_BOTH);
 
-		if (!$stmt->execute())
-		{
-			$db_err = true;
-			$db_ex = 'Select dad2 statement failed';
-		}
-		else {
-			$dad2_datarow = $stmt->fetch();
+		$dad2 = -1;
+		
+		while ($dad2 == -1 || $dad2 == $dad1) {
+			// dad 2
+			$stmt = $conn->prepare("SELECT v.`id`, `dads_name`, `img_guid` FROM `register` v JOIN ( SELECT `register_id` FROM `approved` a JOIN (SELECT (RAND() * (SELECT MAX(id) FROM approved  WHERE register_id != " . $dad1_datarow['id'] . ")) AS id) AS r WHERE a.id >= r.id LIMIT 1 ) as x WHERE v.id = x.register_id;");
+			$stmt->setFetchMode(PDO::FETCH_BOTH);
+
+			if (!$stmt->execute())
+			{
+				$db_err = true;
+				$db_ex = 'Select dad2 statement failed';
+				$dad2 = 1;
+			}
+			else {
+				$dad2_datarow = $stmt->fetch();
+				$dad2 = $dad2_datarow['id'];
+			}
 		}
 		
 		
@@ -181,14 +188,14 @@ require_once('assets/head.php');
 					<input type="hidden" name="dad2" value="<?= $dad2_datarow['id'] ?>" />
 					<div class="row">
 						<div class="four offset-by-one column image">
-							<input type="image" id="image-2" name="vote1" value="<?= $dad1_datarow['id'] ?>" src="img/upload.jpg" width="320" height="250" />
+							<input type="image" id="image-2" name="vote1" value="<?= $dad1_datarow['id'] ?>" src="img/frame-horz.png" width="320" height="250" />
 							<?= $dad1_datarow['dads_name'] ?>
 						</div>
 						<div class="two column vs">
 							VS
 						</div>
 						<div class="four column image end">
-							<input type="image" id="image-2" name="vote2" value="<?= $dad2_datarow['id'] ?>" src="img/upload.jpg" width="320" height="250" />
+							<input type="image" id="image-2" name="vote2" value="<?= $dad2_datarow['id'] ?>" src="img/frame-horz.png" width="320" height="250" />
 							<?= $dad2_datarow['dads_name'] ?>
 						</div>
 					</div>

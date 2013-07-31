@@ -45,7 +45,7 @@ if (isset($_SESSION['logged_in'])) {
 		
 			$sql_str = (strlen($search_term) == 0)
 			? "
-SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, (`vote_count` / `ratio`) as `ratio`
+SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, `ratio`
 FROM `register` r
 INNER JOIN (
 	SELECT registered_id, AVG(calc.ratio) AS ratio
@@ -61,7 +61,7 @@ ORDER BY vote_count DESC, ratio DESC, battle_count DESC, created_at ASC
 LIMIT 20;
 "
 			: "
-SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, (`vote_count` / `ratio`) as `ratio`
+SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, `ratio`
 FROM `register` r
 INNER JOIN (
 	SELECT registered_id, AVG(calc.ratio) AS ratio
@@ -162,7 +162,7 @@ else :
 		<td><?= $data['your_email'] ?></td>
 		<td class="text-center"><?= $data['battle_count'] ?></td>
 		<td class="text-center"><strong><?= $data['vote_count'] ?></strong></td>
-		<td class="text-center"><?= round($data['ratio'] * 100, 3) ?>%</td>
+		<td class="text-center"><?= round(1 / $data['ratio'] * 100, 2) ?>%</td>
 	</tr><?
 	endforeach;
 	?>
