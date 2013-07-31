@@ -30,8 +30,13 @@ $your_email_err = '';
 $contact_number = null;
 $contact_number_err = '';
 
+$your_state = null;
+$your_state_err = '';
+
 $your_branch = null;
 $your_branch_err = '';
+
+$why_for = null;
 
 $agree_terms = null;
 $agree_terms_err = '';
@@ -109,11 +114,16 @@ if ($submitted) {
 	$your_email = isset($_POST['your_email']) ? $_POST['your_email'] : array();
 	$your_email_err = !isValidEmail($your_email) ? 'Please supply your email address' : '';
 
+	$your_state = isset($_POST['your_state']) ? $_POST['your_state'] : array();
+	$your_state_err = ($your_state < 0) ? 'Please supply your state' : '';
+
 	$your_branch = isset($_POST['your_branch']) ? $_POST['your_branch'] : array();
-	$your_branch_err = (mb_strlen($your_branch) < 2) ? 'Please supply your branch' : '';
+	$your_branch_err = ($your_branch < 0) ? 'Please supply your branch' : '';
 
 	$contact_number = isset($_POST['contact_number']) ? $_POST['contact_number'] : array();
 	$contact_number_err = !isValidPhone($contact_number) ? 'Please supply your contact number' : '';
+
+	$why_for = isset($_POST['why_for']) ? $_POST['why_for'] : array();
 	
 	$agree_terms = isset($_POST['agree_terms']) ? strtolower(mb_strimwidth($_POST['agree_terms'], 0, 2)) == 'on' : false;
 	$agree_terms_err = !$agree_terms;
@@ -121,7 +131,7 @@ if ($submitted) {
 	$img_guid = $img_guid ? $img_guid : (isset($_POST['img_guid']) ? $_POST['img_guid'] : array());
 	$img_ext = $img_ext ? $img_ext : (isset($_POST['img_ext']) ? $_POST['img_ext'] : array());
 	$img_landscape = $img_landscape ? $img_landscape : (isset($_POST['img_landscape']) ? $_POST['img_landscape'] : array());
-	$img_url = 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/' . $img_guid . '.' . $img_ext;
+	$img_url = $img_guid == '' ? '' : 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/' . $img_guid . '.' . $img_ext;
 
 	$form_err = $first_name_err || $last_name_err || $dads_name_err || $your_email_err || $your_branch_err || $contact_number_err || $agree_terms_err || $img_err;
 
@@ -191,7 +201,7 @@ if ($submitted) {
 require_once('assets/head.php');
 
 ?>
-<body>
+<body class="enter">
 		<!--[if lt IE 7]>
 		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 		<![endif]-->
@@ -274,45 +284,63 @@ else :
 								<div class="six columns">
 									<div class="row form-elem">
 										<div class="six columns <?= $first_name_err ? 'error' : ''; ?>">
-											<label for="first_name">Your first name</label>
+											<label class="cooper" for="first_name">Your first name</label>
 											<div class="controls">
 												<input type="text"id="first_name" name="first_name" maxlength="64" value="<?= mb_strlen($first_name_err) > 0 ? '' : $first_name ?>" placeholder="<?= $first_name_err ?>" />
 											</div>
 										</div>
 										<div class="six columns <?= $last_name_err ? 'error' : ''; ?>">
 											<div class="controls">
-											<label for="last_name">Your last name</label>
+											<label class="cooper" for="last_name">Your last name</label>
 												<input type="text" id="last_name" name="last_name" maxlength="64" value="<?= mb_strlen($last_name_err) > 0 ? '' : $last_name ?>" placeholder="<?= $last_name_err ?>" />
 											</div>
 										</div>
 									</div>
 									<div class="row form-elem">
 										<div class="six columns <?= $dads_name_err ? 'error' : ''; ?>">
-											<label for="dads_name">Dad's name</label>
+											<label class="cooper" for="dads_name">Dad's name</label>
 											<div class="controls">
 												<input type="text" id="dads_name" name="dads_name" maxlength="64" value="<?= mb_strlen($dads_name_err) > 0 ? '' : $dads_name ?>" placeholder="<?= $dads_name_err ?>" />
+											</div>
+										</div>
+										<div class="six columns <?= $contact_number_err ? 'error' : ''; ?>">
+											<label class="cooper" for="contact_number">Contact Number</label>
+											<div class="controls">
+												<input type="text" id="contact_number" name="contact_number" maxlength="64" value="<?= mb_strlen($contact_number_err) > 0 ? '' : $contact_number ?>" placeholder="<?= $contact_number_err ?>" />
 											</div>
 										</div>
 									</div>
 									<div class="row form-elem">
 										<div class="twelve columns <?= $contact_number_err ? 'error' : ''; ?>">
-											<label for="your_email">Your email address</label>
+											<label class="cooper" for="your_email">Your email address</label>
 											<div class="controls">
 												<input type="text" id="your_email" name="your_email" maxlength="128" value="<?= mb_strlen($your_email_err) > 0 ? '' : $your_email ?>" class="input-large" placeholder="<?= $your_email_err ?>" />
 											</div>
 										</div>
 									</div>
 									<div class="row form-elem">
-										<div class="six columns <?= $contact_number_err ? 'error' : ''; ?>">
-											<label for="contact_number">Contact Number</label>
+										<div class="six columns <?= $your_state_err ? 'error' : ''; ?>">
+											<label class="cooper" for="your_state">Your state</label>
 											<div class="controls">
-												<input type="text" id="contact_number" name="contact_number" maxlength="64" value="<?= mb_strlen($contact_number_err) > 0 ? '' : $contact_number ?>" placeholder="<?= $contact_number_err ?>" />
+												<select id="your_state" name="your_state">
+													<option>Please select</option>
+												</select>
 											</div>
 										</div>
 										<div class="six columns <?= $your_branch_err ? 'error' : ''; ?>">
-											<label for="your_branch">Your branch</label>
+											<label class="cooper" for="your_branch">Your branch</label>
 											<div class="controls">
-												<input type="text"id="your_branch" name="your_branch" maxlength="64" value="<?= mb_strlen($your_branch_err) > 0 ? '' : $your_branch ?>" data-provide="typeahead" placeholder="<?= $your_branch_err ?>" />
+												<select id="your_branch" name="your_branch">
+													<option>Please select</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="row form-elem">
+										<div class="twelve columns">
+											<label class="cooper" for="why_for">Why we should pimp up your dad</label>
+											<div class="controls">
+													<textarea id="why_for" name="why_for"><?= $why_for ?></textarea>
 											</div>
 										</div>
 									</div>
@@ -321,15 +349,15 @@ else :
 											<div class="controls">
 												<label class="checkbox">
 													<input type="checkbox" id="agree_terms" name="agree_terms" <?= $agree_terms ? ' checked="checked"' : '' ?> />
-													I have read and agree to the <a href="#"  data-reveal-id="terms-modal" >terms and conditions</a>.
+													<div class="copy">I have read and agree to the <a href="#"  data-reveal-id="terms-modal" >terms and conditions</a>.</div>
 												</label>
 											</div>
 										</div>
 									</div>
 
 									<div class="row">
-										<div class="five offset-by-three enter">
-											<button id="submit_button" name="submit_button">Save</button>
+										<div class="five offset-by-three columns enter">
+											<button id="submit_button" name="submit_button">Enter</button>
 										</div>
 									</div>
 									
@@ -367,14 +395,14 @@ endif;
 
 		</div> <!-- /container -->
 
-<?
-if ($img_guid != '') : ?>
 <script>
 $(function(){
 
 	var img = $('#new-img'), img_url = '<?= $img_url ?>';
 	img.hide();
-	img.attr('src', img_url);
+	if (img_url != '') {
+		img.attr('src', img_url);
+	}
 	// setup the img layer to fade in when the img is loaded
 	img.on('load', function(){
 		if (img_url != '') {
@@ -382,10 +410,49 @@ $(function(){
 			$(img.parents('.frame-holder')[0]).addClass('hover');
 		}
 	});
+	
+	// setup the checkbox
+	$('#agree_terms').checkbox();
 
+	// setup select boxes
+	var your_state = $('#your_state'), your_branch = $('#your_branch'),
+	your_state_val = '<?= $your_state ?>', your_branch_val = '<?= $your_branch ?>';
+	// custom select
+	your_state.customSelect();
+	your_state.css('height', '25px');
+	your_branch.customSelect();
+	your_branch.css('height', '25px');
+	
+	// setup the state
+	$.ajax({
+		dataType: "json",
+		url: "assets/stores.json",
+		success: function(data, textStatus, jqXHR) {
+			var states = [{id:1,name:'NSW'},{id:2,name:'ACT'},{id:3,name:'VIC'},{id:4,name:'TAS'},{id:5,name:'QLD'},{id:6,name:'SA'},{id:7,name:'NT'},{id:8,name:'WA'}];
+			// populate the states and attach the state change handler, and trigger it
+			your_state.empty();
+			your_state.append($('<option value="-1">Please select your state</option>'));
+			$.each(states, function(ix, el){
+				your_state.append($('<option value="'+el.id+'"'+(your_state_val == el.id ? ' selected="selected"' : '')+'>'+el.name+'</option>'));
+			});
+			your_state.on('change', function(e){
+				your_branch.empty();
+				your_branch.append($('<option value="-1">Please select'+(your_state.val() === '-1' ? ' your state' : ' your branch')+'</option>'));
+				$.each(data, function(ix, el){
+					if (el.state_id == your_state.val()) {
+						your_branch.append($('<option value="'+el.store_id+'"'+(your_branch_val == el.store_id ? ' selected="selected"' : '')+'>'+el.store_name+'</option>'));
+					}
+				});
+				// setup the branch
+				your_branch.trigger('update');
+			});
+			your_state.change();
+		}
+	});
+	
 });
-</script><?
-endif;
+</script>
+<?
 
 require_once('assets/foot.php');
 ?>

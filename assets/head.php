@@ -9,9 +9,10 @@
 	<title>The Cheesecake Shop - Pimp My Dad</title>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<link rel="icon" href="http://www.cheesecake.com.au/media/favicon/default/favicon_1.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="http://www.cheesecake.com.au/media/favicon/default/favicon_1.ico" type="image/x-icon">
 
 	<link rel="stylesheet" href="css/foundation.min.css" />
-	<link rel="stylesheet" href="css/main.css" />
 	<link rel="stylesheet" href="css/main.css" />
 
 	<script src="js/modernizr.foundation.js"></script>

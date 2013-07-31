@@ -30,13 +30,17 @@
 
 		var can_upload = false;
 
-		// clear error css class when entering text
-		$('.error input').on('keypress', function (e) {
+		function removeError(e) {
 			var el = $($(this).parents('.columns')[0]);
 			if (el) {
 				el.removeClass('error');
 			}
-		});
+		}
+
+		// clear error css class when entering text
+		$('.error input').on('keypress', removeError);
+		$('.error input[type="checkbox"]').on('click', removeError);
+		$('.error select').on('change', removeError);
 		
 		// setup bootstrap input file
 		$('input[type=file]').bootstrapFileInput();
