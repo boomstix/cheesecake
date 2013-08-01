@@ -49,13 +49,20 @@ if (isset($_SESSION['logged_in'])) {
 				if (!$stmt->execute(array(':id' => $_POST['approve'])))
 				{
 					$db_err = true;
-					$db_ex = 'update vote approve statement failed';
+					$db_ex = 'update register approve statement failed';
+				}
+				// register the approve
+				$stmt = $conn->prepare("INSERT INTO approved (`register_id`) VALUES (:id)");
+				if (!$stmt->execute(array(':id' => $_POST['approve'])))
+				{
+					$db_err = true;
+					$db_ex = 'insert approve statement failed';
 				}
 			}
 
 			if (isset($_POST['reject'])) {
 				// register the reject
-				$stmt = $conn->prepare("UPDATE `register` SET is_approved = 0, approved_at = now() where id = :id;");
+				$stmt = $conn->prepare("CALL reject_entry (:id);");
 				if (!$stmt->execute(array(':id' => $_POST['reject'])))
 				{
 					$db_err = true;
@@ -64,7 +71,7 @@ if (isset($_SESSION['logged_in'])) {
 			}
 
 			// grab the unmoderated registrations
-			$sql_str = "SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid` FROM `register` r WHERE is_approved " . ($is_approved_only ? ' = 1' : ($is_rejected_only ? ' = 0' : ' is null')) . " ORDER BY created_at DESC LIMIT 100;";
+			$sql_str = "SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, `img_ext` FROM `register` r WHERE is_approved " . ($is_approved_only ? ' = 1' : ($is_rejected_only ? ' = 0' : ' is null')) . " ORDER BY created_at DESC LIMIT 100;";
 			$stmt = $conn->prepare($sql_str);
 			$stmt->setFetchMode(PDO::FETCH_BOTH);
 		
@@ -93,8 +100,33 @@ require_once('assets/head.php');
 
 ?>
 <body class="admin">
+
+<div id="wrap">
+<div id="main">
+
 <div class="container">
-	<div class="stage"><?
+	<div class="stage">
+	
+<h2><?= $is_approved_only ? 'Approved' : ($is_rejected_only ? 'Rejected' : 'Moderation') ?></h2>
+
+<div class="content">
+
+<h3>
+<?
+if ($is_approved_only) : ?>
+Approved <small> | <a href="?rejected">Rejected</a> | <a href="?">Moderate</a></small>
+<?
+elseif ($is_rejected_only) : ?>
+Rejected <small> | <a href="?approved">Approved</a> | <a href="?">Moderate</a></small>
+<?
+else : ?>
+Moderation  <small> | <a href="?approved">Approved</a> | <a href="?rejected">Rejected</a></small>
+<?
+endif;
+?>
+</h3>
+
+	<?
 
 if ($db_err) :
 
@@ -129,29 +161,23 @@ else :
 	
 	else :
 
-?>
-
-<h2><?= $is_approved_only ? 'Approved' : ($is_rejected_only ? 'Rejected' : 'Moderation') ?></h2>
-
-<?
-
 	if (count($entry_data) == 0) : ?>
 
-<p>There are no un-moderated items.</p> <?
+<p>No items here, Chopper.</p>
+<p>Items - here - none.</p> <?
 
 	else : ?>
-<?= count($entry_data) ?>
 <form method="post">
 <input type="hidden" name="submit_button" value="" />
 <table class="table">
 <tbody><?
-			$itemsPerRow = 2;
+			$itemsPerRow = 6;
 			foreach ($entry_data as $ix => $data) : 
 				if ($ix % $itemsPerRow == 0) : ?> 
 	<tr><?
 				endif; ?> 
 		<td>
-			<img src="<?= $data['img_guid'] ?>" />
+			<img src="<?= 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/' . $data['img_guid'] .'.'. (is_null($data['img_ext']) ? 'jpg' : $data['img_ext'] ) ?>" style="max-width: 120px; max-height: 120px; min-width: 120px; min-height: 120px;" />
 			<div><?= $data['dads_name'] ?></div>
 			<? if (!$is_approved_only) : ?><button type="submit" name="approve" value="<?= $data['id'] ?>">Approve</button><? endif; ?>
 			<? if (!$is_rejected_only) : ?><button type="submit" name="reject" value="<?= $data['id'] ?>">Reject</button><? endif; ?>
@@ -172,8 +198,14 @@ endif; // db_err
 
 
 ?>
+</div>
+
 	</div>
 </div>
 
-</body>
-</html>
+	</div>
+</div>
+
+<?
+require_once('assets/foot.php');
+?>

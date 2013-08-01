@@ -13,14 +13,28 @@ $franchise_login_hash = '';
 $awsAccessKey = 'AKIAJNCR3PWSSU3RUHZA';
 $awsSecretKey = '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';
 $awsUserUploadBucket = 'dads-au';
-$max_file_size_kb = 200;
+$max_file_size_kb = 1000;
+
+$img_domain = 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/';
 
 $analytics_acct = 'UA-1933701-10';
 $analytics_url = 'pimpupdad.com.au';
 
+$competition_running = true;
+
 // $analytics_acct = 'UA-1933701-11';
 // $analytics_url = 'pimpupdad.co.nz';
 
+
+// Loosely validate australian phone number
+function isValidPhone($phone) {
+	return preg_match('/[0-9 ()+]{8,16}/', $phone);
+}
+
+// Strict email validation
+function isValidEmail($email) {
+	return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
 
 /**
  * Generate Globally Unique Identifier (GUID)

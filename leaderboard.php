@@ -43,11 +43,10 @@ if (isset($_SESSION['logged_in'])) {
 	
 			// grab the highest voted entries
 		
-			$sql_str = (strlen($search_term) == 0)
-			? "
-SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, `ratio`
+			$sql_str = "
+SELECT r.`id`, `dads_name`, `your_email`, `created_at`, `contact_number`, `battle_count`, `is_approved`, `vote_count`, `img_guid`, `ratio`
 FROM `register` r
-INNER JOIN (
+LEFT JOIN (
 	SELECT registered_id, AVG(calc.ratio) AS ratio
 	FROM (
 		SELECT registered_id, sum(vote_count) AS ratio
@@ -57,27 +56,12 @@ INNER JOIN (
 	GROUP BY registered_id
 ) AS v ON v.registered_id = r.id
 WHERE !(is_approved IS NULL)
-ORDER BY vote_count DESC, ratio DESC, battle_count DESC, created_at ASC
+" . ((strlen($search_term) == 0) ? "
+AND (first_name like concat('%', '$search_term', '%') OR last_name like concat('%', '$search_term', '%') OR dads_name like concat('%', '$search_term', '%') OR your_email like concat('%', '$search_term', '%'))"
+: "") . "
+ORDER BY is_approved DESC, vote_count DESC, ratio ASC, battle_count DESC, created_at ASC
 LIMIT 20;
-"
-			: "
-SELECT r.`id`, `dads_name`, `your_email`, `contact_number`, `battle_count`, `vote_count`, `img_guid`, `ratio`
-FROM `register` r
-INNER JOIN (
-	SELECT registered_id, AVG(calc.ratio) AS ratio
-	FROM (
-		SELECT registered_id, sum(vote_count) AS ratio
-		FROM vote_log
-		GROUP BY registered_id, ip_address
-	) AS calc
-	GROUP BY registered_id
-) AS v ON v.registered_id = r.id
-WHERE !(is_approved IS NULL)
-AND (first_name like concat('%', '$search_term', '%') OR last_name like concat('%', '$search_term', '%') OR dads_name like concat('%', '$search_term', '%') OR your_email like concat('%', '$search_term', '%'))
-ORDER BY vote_count DESC, ratio DESC, battle_count DESC, created_at ASC
-LIMIT 20;
-;"
-			;
+;";
 			$stmt = $conn->prepare($sql_str);
 			$stmt->setFetchMode(PDO::FETCH_BOTH);
 		
@@ -106,8 +90,21 @@ require_once('assets/head.php');
 
 ?>
 <body class="admin">
+
+<div id="wrap">
+<div id="main">
+
 <div class="container">
-	<div class="stage"><?
+	<div class="stage">
+	
+<h2>Leaderboard</h2>
+
+<div class="content">
+
+<h3>Leaderboard</h3>
+
+	
+	<?
 
 
 if ($db_err) :
@@ -139,14 +136,17 @@ else :
 	<?
 	
 	else :
+		if (count($leader_data) == 0) : ?>
+		<p>No votes!</p>
+<?
+		
+		else : ?>
 
-?>
-
-<h2>Leaderboard</h2>
-<table class="table">
+<table class="table" style="width: 100%;">
 <thead>
 	<tr>
 		<th>Entry</th>
+		<th>Created</th>
 		<th>Contact No</th>
 		<th>Email</th>
 		<th>Battles</th>
@@ -156,18 +156,20 @@ else :
 </thead>
 <tbody><?
 	foreach ($leader_data as $ix => $data) : ?>
-	<tr>
+	<tr<?= $data['is_approved'] == '1' ? '' : ' class="rejected" title="Entry has been rejected"' ; ?>>
 		<td><?= $data['dads_name'] ?></td>
+		<td><?= $data['created_at'] ?></td>
 		<td><?= $data['contact_number'] ?></td>
 		<td><?= $data['your_email'] ?></td>
 		<td class="text-center"><?= $data['battle_count'] ?></td>
 		<td class="text-center"><strong><?= $data['vote_count'] ?></strong></td>
-		<td class="text-center"><?= round(1 / $data['ratio'] * 100, 2) ?>%</td>
+		<td class="text-center"><?= $data['ratio'] == 0 ? 0 : round(1 / $data['ratio'] * 100, 2) ?>%</td>
 	</tr><?
 	endforeach;
 	?>
 </tbody>
 </table><?
+			endif;
 
 	endif; // loggedin
 
@@ -175,8 +177,14 @@ endif; // db_err
 
 
 ?>
+</div>
+
 	</div>
 </div>
 
-</body>
-</html>
+	</div>
+</div>
+
+<?
+require_once('assets/foot.php');
+?>

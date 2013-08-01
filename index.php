@@ -16,6 +16,7 @@ $dad2 = -1;
 $dad1_datarow = null;
 $dad2_datarow = null;
 
+// if the form was submitted
 if (isset($_POST['submit'])) {
 	
 	if (isset($_POST['vote1'])) {
@@ -125,7 +126,7 @@ try {
 		// grab two random entries from register table
 		
 		// dad 1
-		$stmt = $conn->prepare("SELECT v.`id`, `dads_name`, `img_guid` FROM `register` v JOIN ( SELECT `register_id` FROM `approved` a JOIN (SELECT (RAND() * (SELECT MAX(id) FROM approved)) AS id) AS r WHERE a.id >= r.id LIMIT 1 ) as x WHERE v.id = x.register_id;");
+		$stmt = $conn->prepare("SELECT v.`id`, `dads_name`, `vote_count`, `img_guid`, `img_ext`, `img_landscape` FROM `register` v JOIN ( SELECT `register_id` FROM `approved` a JOIN (SELECT (RAND() * (SELECT MAX(id) FROM approved)) AS id) AS r WHERE a.id >= r.id LIMIT 1 ) as x WHERE v.id = x.register_id;");
 		$stmt->setFetchMode(PDO::FETCH_BOTH);
 		
 		if (!$stmt->execute())
@@ -135,14 +136,18 @@ try {
 		}
 		else {
 			$dad1_datarow = $stmt->fetch();
-			$dad1 = $dad1_datarow['id'];
+			if (!empty($dad1_datarow)) {
+				$dad1 = $dad1_datarow['id'];
+			}
 		}
 
 		$dad2 = -1;
 		
 		while ($dad2 == -1 || $dad2 == $dad1) {
 			// dad 2
-			$stmt = $conn->prepare("SELECT v.`id`, `dads_name`, `img_guid` FROM `register` v JOIN ( SELECT `register_id` FROM `approved` a JOIN (SELECT (RAND() * (SELECT MAX(id) FROM approved  WHERE register_id != " . $dad1_datarow['id'] . ")) AS id) AS r WHERE a.id >= r.id LIMIT 1 ) as x WHERE v.id = x.register_id;");
+			
+			$sql = "SELECT v.`id`, `dads_name`, `vote_count`, `img_guid`, `img_ext`, `img_landscape` FROM `register` v JOIN ( SELECT `register_id` FROM `approved` a JOIN (SELECT (RAND() * (SELECT MAX(id) FROM approved  WHERE register_id != " . $dad1 . ")) AS id) AS r WHERE a.id >= r.id LIMIT 1 ) as x WHERE v.id = x.register_id;";
+			$stmt = $conn->prepare($sql);
 			$stmt->setFetchMode(PDO::FETCH_BOTH);
 
 			if (!$stmt->execute())
@@ -170,50 +175,155 @@ require_once('assets/head.php');
 ?>
 <body class="vote">
 
-		<!--[if lt IE 7]>
-		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-		<![endif]-->
+<div id="wrap">
+<div id="main">
 
-		<div class="container">
+	<!--[if lt IE 7]>
+	<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+	<![endif]-->
+
+<div class="container">
+	<div class="stage">
 		
-			<div class="stage">
+		<h2>Pimp Up Your Dad</h2>
+		
+		<h3>Enter your dad for a chance to win</h3>
+<?
+
+if ($competition_running) :
+
+?>		
+		<? if ($db_err) : ?>
+		<?= $db_ex->getMessage() ?>
+		<? elseif ($dad1_datarow && $dad2_datarow) : ?>
 			
-			<? if ($db_err) : ?>
-			<?= $db_ex->getMessage() ?>
-			<? elseif ($dad1_datarow && $dad2_datarow) : ?>
-			
-				<form class="form" method="post">
-					<input type="hidden" name="submit" value="1" />
-					<input type="hidden" name="dad1" value="<?= $dad1_datarow['id'] ?>" />
-					<input type="hidden" name="dad2" value="<?= $dad2_datarow['id'] ?>" />
-					<div class="row">
-						<div class="four offset-by-one column image">
-							<input type="image" id="image-2" name="vote1" value="<?= $dad1_datarow['id'] ?>" src="img/frame-horz.png" width="320" height="250" />
-							<?= $dad1_datarow['dads_name'] ?>
-						</div>
-						<div class="two column vs">
-							VS
-						</div>
-						<div class="four column image end">
-							<input type="image" id="image-2" name="vote2" value="<?= $dad2_datarow['id'] ?>" src="img/frame-horz.png" width="320" height="250" />
-							<?= $dad2_datarow['dads_name'] ?>
+		<form class="form" method="post" action="?">
+			<input type="hidden" name="submit" value="1" />
+			<input type="hidden" name="dad1" value="<?= $dad1_datarow['id'] ?>" />
+			<input type="hidden" name="dad2" value="<?= $dad2_datarow['id'] ?>" />
+			<div class="row">
+				<div class="four offset-by-one column image">
+
+					<div class="vert-outer vert-full">
+						<div class="vert-inner">
+
+							<div class="frame-holder<?= $dad1_datarow['img_landscape'] ? ' horz' : ' vert' ?>">
+								<input class="frame frame-layer" type="image" id="vote1" name="vote1" value="<?= $dad1_datarow['id'] ?>" src="img/shim.png" />
+								<div class="frame pimp-layer"></div>
+								<div class="frame-inner transp-layer"></div>
+								<div class="img-layer-outer vert-outer">
+									<div class="img-layer-inner vert-inner">
+									<img id="image-1" src="img/shim.png" />
+									</div>
+								</div>
+							</div>
+							<div class="vote-count cooper"><?= $dad1_datarow['vote_count'] . ' vote' . ($dad1_datarow['vote_count'] == 1 ? '' : 's') ?></div>
+
 						</div>
 					</div>
 
-					<div class="row">
-						<div class="four offset-by-four column enter">
-							<a href="form.php">Click Here To Enter</a>
+				</div>
+				<div class="two column vs">
+					<span>VS</span>
+				</div>
+				<div class="four column image end">
+
+					<div class="vert-outer vert-full">
+						<div class="vert-inner">
+					
+							<div class="frame-holder<?= $dad2_datarow['img_landscape'] ? ' horz' : ' vert' ?>">
+								<input class="frame frame-layer" type="image" id="vote2" name="vote2" value="<?= $dad2_datarow['id'] ?>" src="img/shim.png" />
+								<div class="frame pimp-layer"></div>
+								<div class="frame-inner transp-layer"></div>
+								<div class="img-layer-outer vert-outer">
+									<div class="img-layer-inner vert-inner">
+									<img id="image-2" src="img/shim.png" />
+									</div>
+								</div>
+							</div>
+							<div class="vote-count cooper"><?= $dad2_datarow['vote_count'] . ' vote' . ($dad2_datarow['vote_count'] == 1 ? '' : 's') ?></div>
+
 						</div>
 					</div>
-					
-					
-					
-				</form>
-			<? endif; ?>
-			
+
+				</div>
 			</div>
+
+			<div class="row">
+				<div class="four offset-by-one column ribbon">
+				
+					<div class="dads-name cooper"><?= $dad1_datarow['dads_name'] ?></div>
+					
+				</div>
+				<div class="two column">
+				</div>
+				<div class="four column ribbon end">
+						
+					<div class="dads-name cooper"><?= $dad2_datarow['dads_name'] ?></div>
+					
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="four offset-by-four column enter">
+					<a href="form.php">Click Here To Enter</a>
+				</div>
+			</div>
+			
+		</form>
+		<? endif; ?>
 		
-		</div>
+	</div>
+
+			<div id="success-modal" class="reveal-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-body">
+					<h4>Yay! Thanks for entering!</h4>
+					<p>We love your Dad's guts cos you know you do.</p>
+					<p>Once your entry is approved, your old man's head will appear for people to rate.</p>
+					<p>We really hope he wasn't hit with the ugly stick,<br/>
+					unless he's so dropped pie that its hilarious ..</p>
+					<p>Now get out and vote!</p>
+				</div>
+				<div class="modal-footer">
+					<a class="close-reveal-modal" data-dismiss="modal" aria-hidden="true">&times;</a>
+				</div>
+			</div>
+			<?
+			
+else: // $competition_running
+
+?>
+
+<div class="content">
+	<h4 class="cooper">Oh Noes!</h4>
+	<p>We are sooo not accepting entries right now! Soooo sorry!!</p>
+</div>
+
+<?
+
+endif; // $competition_running
+?>
+
+	</div><!-- .stage -->
+</div><!-- .container -->
+</div><!-- #main -->
+</div><!-- #wrap -->
+<?
+require_once('assets/scripts.php');
+?><script>
+$(function(){
+
+	if (location.search == '?entry_success') {
+		$('#success-modal').reveal();
+	}
+
+	var	img1 = new ImgLoadFadeIn('#image-1', '<?= $img_domain . $dad1_datarow["img_guid"] . "." . $dad1_datarow["img_ext"] ?>')
+	,	img2 = new ImgLoadFadeIn('#image-2', '<?= $img_domain . $dad2_datarow["img_guid"] . "." . $dad2_datarow["img_ext"] ?>')
+	;
 	
-</body>
-</html>
+
+});
+</script>	
+<?
+require_once('assets/foot.php');
+?>

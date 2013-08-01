@@ -3,16 +3,6 @@
 require_once('assets/config.php');
 require_once('assets/s3.php');
 
-// validate functions
-
-function isValidPhone($phone) {
-	return preg_match('/[0-9 ()+]{8,16}/', $phone);
-}
-
-function isValidEmail($email) {
-	return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
 // initialise our validation vars
 
 $first_name = null;
@@ -86,7 +76,7 @@ if ($image_submitted || $submitted) {
 		
 			//move the file  
 			if ($s3->putObjectFile($_FILES['upload_image']['tmp_name'], $awsUserUploadBucket, $new_file_name, S3::ACL_PUBLIC_READ)) {
-				$img_url = 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/' . $new_file_name;
+				$img_url = $img_domain . $new_file_name;
 				$img_msg = 'Click to change<br /> your image';
 			}
 			else {
@@ -97,45 +87,60 @@ if ($image_submitted || $submitted) {
 	
 	}
 
-}
-
-// check the form submission
-if ($submitted) {
-
 	$first_name = isset($_POST['first_name']) ? $_POST['first_name'] : array();
-	$first_name_err = (mb_strlen($first_name) < 2) ? 'Please supply your first name' : '';
+	if ($submitted) {
+		$first_name_err = (mb_strlen($first_name) < 2) ? 'Please supply your first name' : '';
+	}
 
 	$last_name = isset($_POST['last_name']) ? $_POST['last_name'] : array();
-	$last_name_err = (mb_strlen($last_name) < 2) ? 'Please supply your last name' : '';
+	if ($submitted) {
+		$last_name_err = (mb_strlen($last_name) < 2) ? 'Please supply your last name' : '';
+	}
 
 	$dads_name = isset($_POST['dads_name']) ? $_POST['dads_name'] : array();
-	$dads_name_err = (mb_strlen($dads_name) < 2) ? 'Please supply your Dad\'s name' : '';
+	if ($submitted) {
+		$dads_name_err = (mb_strlen($dads_name) < 2) ? 'Please supply your Dad\'s name' : '';
+	}
 
 	$your_email = isset($_POST['your_email']) ? $_POST['your_email'] : array();
-	$your_email_err = !isValidEmail($your_email) ? 'Please supply your email address' : '';
+	if ($submitted) {
+		$your_email_err = !isValidEmail($your_email) ? 'Please supply your email address' : '';
+	}
 
 	$your_state = isset($_POST['your_state']) ? $_POST['your_state'] : array();
-	$your_state_err = ($your_state < 0) ? 'Please supply your state' : '';
+	if ($submitted) {
+		$your_state_err = ($your_state < 0) ? 'Please supply your state' : '';
+	}
 
 	$your_branch = isset($_POST['your_branch']) ? $_POST['your_branch'] : array();
-	$your_branch_err = ($your_branch < 0) ? 'Please supply your branch' : '';
+	if ($submitted) {
+		$your_branch_err = ($your_branch < 0) ? 'Please supply your branch' : '';
+	}
 
 	$contact_number = isset($_POST['contact_number']) ? $_POST['contact_number'] : array();
-	$contact_number_err = !isValidPhone($contact_number) ? 'Please supply your contact number' : '';
+	if ($submitted) {
+		$contact_number_err = !isValidPhone($contact_number) ? 'Please supply your contact number' : '';
+	}
 
 	$why_for = isset($_POST['why_for']) ? $_POST['why_for'] : array();
 	
 	$agree_terms = isset($_POST['agree_terms']) ? strtolower(mb_strimwidth($_POST['agree_terms'], 0, 2)) == 'on' : false;
-	$agree_terms_err = !$agree_terms;
+	if ($submitted) {
+		$agree_terms_err = !$agree_terms;
+	}
 	
 	$img_guid = $img_guid ? $img_guid : (isset($_POST['img_guid']) ? $_POST['img_guid'] : array());
 	$img_ext = $img_ext ? $img_ext : (isset($_POST['img_ext']) ? $_POST['img_ext'] : array());
 	$img_landscape = $img_landscape ? $img_landscape : (isset($_POST['img_landscape']) ? $_POST['img_landscape'] : array());
-	$img_url = $img_guid == '' ? '' : 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/' . $img_guid . '.' . $img_ext;
+	$img_url = $img_guid == '' ? '' : $img_domain . $img_guid . '.' . $img_ext;
+
+	if ($submitted) {
+		$img_err = (strlen($img_guid) == 0) ? 'Please select and<br/>upload an image' : '';
+	}
 
 	$form_err = $first_name_err || $last_name_err || $dads_name_err || $your_email_err || $your_branch_err || $contact_number_err || $agree_terms_err || $img_err;
 
-	if (!$form_err) {
+	if (!$form_err && $submitted) {
 
 		// now submit to the database.
 
@@ -164,7 +169,9 @@ if ($submitted) {
 						$your_email_err = 'That email address is already registered';
 					}
 					else {
-						$stmt = $conn->prepare("INSERT INTO `register` (`first_name`,`last_name`,`dads_name`,`your_email`,`contact_number`,`your_branch`,`img_guid`,`ip_address`,`created_at`) VALUES (:first_name,:last_name,:dads_name,:your_email,:contact_number,:your_branch,:ip_address,now())");
+						$stmt = $conn->prepare("
+INSERT INTO `register` (`first_name`,`last_name`,`dads_name`,`your_email`,`contact_number`,`your_branch`,`img_guid`,`img_ext`,`img_landscape`,`ip_address`,`why_for`,`created_at`)
+VALUES (:first_name,:last_name,:dads_name,:your_email,:contact_number,:your_branch,:img_guid,:img_ext,:img_landscape,:ip_address,:why_for,now())");
 
 						if (!$stmt->execute(array(
 							':first_name' => $first_name,
@@ -173,8 +180,11 @@ if ($submitted) {
 							':your_email' => $your_email,
 							':contact_number' => $contact_number,
 							':your_branch' => $your_branch,
+							':img_guid' => $img_guid,
+							':img_ext' => $img_ext,
+							':img_landscape' => $img_landscape == 1,
 							':ip_address' => $_SERVER['REMOTE_ADDR'],
-							':img_guid' => $img_guid
+							':why_for' => $why_for
 							))
 						)
 						{
@@ -194,7 +204,11 @@ if ($submitted) {
 		}
 		// double check there's no email error
 		$form_err = $first_name_err || $last_name_err || $dads_name_err || $your_email_err || $your_branch_err || $contact_number_err || $agree_terms_err || $img_err;
-
+		
+		if (!$form_err && !$db_err) {
+			header("Location: index.php?entry_success");
+			exit;
+		}
 	}
 }
 
@@ -202,6 +216,10 @@ require_once('assets/head.php');
 
 ?>
 <body class="enter">
+
+<div id="wrap">
+<div id="main">
+
 		<!--[if lt IE 7]>
 		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 		<![endif]-->
@@ -209,28 +227,32 @@ require_once('assets/head.php');
 		<div class="container">
 		
 			<div class="stage">
+			
+			<h2>Pimp Up Your Dad</h2>
+			
+			<h3>Enter your dad for a chance to win</h3>
+			
 <?
 
-if ($submitted && !($form_err || $db_err != '')) : ?>
-<div class="row">
+if ($competition_running) :
 
-	<div class="eight offset-by-two columns">
-	
-		<h3>Thanks for entering!</h3>
-		
-		<h3>Remember to keep voting!</h3>
-		
-	</div>
+/*
+echo $submitted ? 'submitted' : 'not submitted';
+echo $form_err ? 'form_err' : 'not form_err';
+echo $db_err ? 'db_err' : 'not db_err';
+*/
 
-</div>
-<?
+if ($submitted && !($form_err || $db_err != '')) :
+
+	// success - pass through - we should have been redirected by now
+
 elseif ($db_err) :
 ?>
-<div class="row">
+<div class="content row">
 
 	<div class="eight offset-by-two columns">
 	
-		<h3>We have a problem</h3>
+		<h4>We have a problem</h4>
 		
 		<p>We have been unable to save your Dad's entry.</p>
 		
@@ -240,7 +262,9 @@ elseif ($db_err) :
 		
 		<p>The email address <?= $your_email ?> is already registered!</p>
 		
-		<? else : ?>
+		<? else : 
+		echo $db_ex;
+		?>
 
 		<p>If this issue persists, please contact <a href="mailto:<?= $support_email ?>"><?= $support_email ?></a> to resolve the issue.</p>
 		
@@ -266,9 +290,9 @@ else :
 										<div class="frame-holder<?= $img_landscape ? ' horz' : ' vert' ?><?= (strlen($img_err) > 0) ? ' error' : '' ?>" style="visibility:hidden;">
 											<input type="file" id="upload_image" name="upload_image" title="" class="frame frame-layer" />
 											<div class="frame text-layer"><?= strlen($img_err) > 0 ? $img_err : $img_msg ?></div>
-											<div class="frame opacity-layer"></div>
-											<div class="img-layer-outer">
-												<div class="img-layer-inner">
+											<div class="frame-inner opacity-layer"></div>
+											<div class="img-layer-outer vert-outer vert-full">
+												<div class="img-layer-inner vert-inner">
 													<img id="new-img" />
 												</div>
 											</div>
@@ -340,7 +364,7 @@ else :
 										<div class="twelve columns">
 											<label class="cooper" for="why_for">Why we should pimp up your dad</label>
 											<div class="controls">
-													<textarea id="why_for" name="why_for"><?= $why_for ?></textarea>
+													<textarea id="why_for" name="why_for"><?= stripslashes($why_for) ?></textarea>
 											</div>
 										</div>
 									</div>
@@ -366,7 +390,20 @@ else :
 							
 						</form>
 <?
-endif;
+endif; // $submitted
+
+else: // $competition_running
+
+?>
+
+<div class="content">
+	<h4 class="cooper">Oh Noes!</h4>
+	<p>We are sooo not accepting entries right now! Soooo sorry!!</p>
+</div>
+
+<?
+
+endif; // $competition_running
 ?>
 			</div><!-- .stage -->
 
@@ -389,70 +426,20 @@ endif;
 				</div>
 			</div>
 			
-		<footer>
-		<p>&copy; Company 2012</p>
-		</footer>
-
-		</div> <!-- /container -->
-
+		</div> <!-- .container -->
+</div><!-- #main -->
+</div><!-- #wrap -->
+<?
+require_once('assets/scripts.php');
+?>
 <script>
+var your_state_val = '<?= $your_state ?>', your_branch_val = '<?= $your_branch ?>';
 $(function(){
 
-	var img = $('#new-img'), img_url = '<?= $img_url ?>';
-	img.hide();
-	if (img_url != '') {
-		img.attr('src', img_url);
-	}
-	// setup the img layer to fade in when the img is loaded
-	img.on('load', function(){
-		if (img_url != '') {
-			img.fadeIn();
-			$(img.parents('.frame-holder')[0]).addClass('hover');
-		}
-	});
-	
-	// setup the checkbox
-	$('#agree_terms').checkbox();
+	var img = new ImgLoadFadeIn('#new-img', '<?= $img_url ?>')
 
-	// setup select boxes
-	var your_state = $('#your_state'), your_branch = $('#your_branch'),
-	your_state_val = '<?= $your_state ?>', your_branch_val = '<?= $your_branch ?>';
-	// custom select
-	your_state.customSelect();
-	your_state.css('height', '25px');
-	your_branch.customSelect();
-	your_branch.css('height', '25px');
-	
-	// setup the state
-	$.ajax({
-		dataType: "json",
-		url: "assets/stores.json",
-		success: function(data, textStatus, jqXHR) {
-			var states = [{id:1,name:'NSW'},{id:2,name:'ACT'},{id:3,name:'VIC'},{id:4,name:'TAS'},{id:5,name:'QLD'},{id:6,name:'SA'},{id:7,name:'NT'},{id:8,name:'WA'}];
-			// populate the states and attach the state change handler, and trigger it
-			your_state.empty();
-			your_state.append($('<option value="-1">Please select your state</option>'));
-			$.each(states, function(ix, el){
-				your_state.append($('<option value="'+el.id+'"'+(your_state_val == el.id ? ' selected="selected"' : '')+'>'+el.name+'</option>'));
-			});
-			your_state.on('change', function(e){
-				your_branch.empty();
-				your_branch.append($('<option value="-1">Please select'+(your_state.val() === '-1' ? ' your state' : ' your branch')+'</option>'));
-				$.each(data, function(ix, el){
-					if (el.state_id == your_state.val()) {
-						your_branch.append($('<option value="'+el.store_id+'"'+(your_branch_val == el.store_id ? ' selected="selected"' : '')+'>'+el.store_name+'</option>'));
-					}
-				});
-				// setup the branch
-				your_branch.trigger('update');
-			});
-			your_state.change();
-		}
-	});
-	
 });
 </script>
 <?
-
 require_once('assets/foot.php');
 ?>

@@ -63,7 +63,7 @@
                 return true;
             });
             
-            self.css({ 'position': 'absolute', 'top': '-200px', 'left': '-200px'}).before(replacement);
+            self.css({ 'position': 'absolute', 'visibility': 'hidden'}).before(replacement);
             replacement.parent().css('overflow', 'hidden');
         });
     }
