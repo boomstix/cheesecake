@@ -1,6 +1,6 @@
 <?
 
-require_once('assets/config.php');
+require_once('./assets/config.php');
 
 // did we submit
 $submitted = false;
@@ -170,7 +170,7 @@ catch (PDOException $e) {
 	$db_ex = $e;
 }
 
-require_once('assets/head.php');
+require_once('./assets/head.php');
 
 ?>
 <body class="vote">
@@ -191,7 +191,7 @@ require_once('assets/head.php');
 		
 		<a href="#" data-reveal-id="win-modal" class="what-can-i-win">What can I win?</a>
 
-		<a href="#" class="enter-your-dad">Enter your Dad</a>
+		<a href="form.php" class="enter-your-dad">Enter your Dad</a>
 
 <?
 
@@ -269,12 +269,6 @@ if ($competition_running) :
 				</div>
 			</div>
 			
-			<div class="row">
-				<div class="four offset-by-four column enter">
-					<a href="form.php">Click Here To Enter</a>
-				</div>
-			</div>
-			
 		</form>
 		<? endif; ?>
 		
@@ -294,14 +288,14 @@ else: // $competition_running
 
 endif; // $competition_running
 
-require_once('assets/overlays.php');
+require_once('./assets/overlays.php');
 ?>
 	</div><!-- .stage -->
 </div><!-- .container -->
 </div><!-- #main -->
 </div><!-- #wrap -->
 <?
-require_once('assets/scripts.php');
+require_once('./assets/scripts.php');
 ?>
 <script>
 $(function(){
@@ -318,5 +312,5 @@ $(function(){
 });
 </script>	
 <?
-require_once('assets/foot.php');
+require_once('./assets/foot.php');
 ?>

@@ -159,6 +159,36 @@ a:hover, a:visited, a:active, a:focus {
 	margin: 0 auto;
 }
 
+.what-can-i-win {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 100px;
+	background-image: url(../img/btn-what-can-i-win.png);
+	background-position: 0 0;
+	width: 190px;
+	height: 98px;
+	text-indent: -9999px;
+}
+.what-can-i-win:hover {
+	background-position: 0 -98px;
+}
+
+.enter-your-dad {
+	display: block;
+	position: absolute;
+	top: 10px;
+	right: 100px;
+	background-image: url(../img/btn-enter-your-dad.png);
+	background-position: 0 0;
+	width: 140px;
+	height: 71px;
+	text-indent: -9999px;
+}
+.enter-your-dad:hover {
+	background-position: 0 -71px;
+}
+
 .form {
 	padding-top: 50px;
 }

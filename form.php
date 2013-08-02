@@ -1,7 +1,7 @@
 <?
 
-require_once('assets/config.php');
-require_once('assets/s3.php');
+require_once('./assets/config.php');
+require_once('./assets/S3.php');
 
 // initialise our validation vars
 
@@ -89,17 +89,17 @@ if ($image_submitted || $submitted) {
 
 	$first_name = isset($_POST['first_name']) ? $_POST['first_name'] : array();
 	if ($submitted) {
-		$first_name_err = (mb_strlen($first_name) < 2) ? 'Please supply your first name' : '';
+		$first_name_err = (strlen($first_name) < 2) ? 'Please supply your first name' : '';
 	}
 
 	$last_name = isset($_POST['last_name']) ? $_POST['last_name'] : array();
 	if ($submitted) {
-		$last_name_err = (mb_strlen($last_name) < 2) ? 'Please supply your last name' : '';
+		$last_name_err = (strlen($last_name) < 2) ? 'Please supply your last name' : '';
 	}
 
 	$dads_name = isset($_POST['dads_name']) ? $_POST['dads_name'] : array();
 	if ($submitted) {
-		$dads_name_err = (mb_strlen($dads_name) < 2) ? 'Please supply your Dad\'s name' : '';
+		$dads_name_err = (strlen($dads_name) < 2) ? 'Please supply your Dad\'s name' : '';
 	}
 
 	$your_email = isset($_POST['your_email']) ? $_POST['your_email'] : array();
@@ -124,7 +124,7 @@ if ($image_submitted || $submitted) {
 
 	$why_for = isset($_POST['why_for']) ? $_POST['why_for'] : array();
 	
-	$agree_terms = isset($_POST['agree_terms']) ? strtolower(mb_strimwidth($_POST['agree_terms'], 0, 2)) == 'on' : false;
+	$agree_terms = isset($_POST['agree_terms']) ? strtolower(substr($_POST['agree_terms'], 0, 2)) == 'on' : false;
 	if ($submitted) {
 		$agree_terms_err = !$agree_terms;
 	}
@@ -232,6 +232,8 @@ require_once('assets/head.php');
 			
 			<h3>Enter your dad for a chance to win</h3>
 			
+			<a href="#" data-reveal-id="win-modal" class="what-can-i-win">What can I win?</a>
+
 <?
 
 if ($competition_running) :
@@ -310,13 +312,13 @@ else :
 										<div class="six columns <?= $first_name_err ? 'error' : ''; ?>">
 											<label class="cooper" for="first_name">Your first name</label>
 											<div class="controls">
-												<input type="text"id="first_name" name="first_name" maxlength="64" value="<?= mb_strlen($first_name_err) > 0 ? '' : $first_name ?>" placeholder="<?= $first_name_err ?>" />
+												<input type="text"id="first_name" name="first_name" maxlength="64" value="<?= strlen($first_name_err) > 0 ? '' : $first_name ?>" placeholder="<?= $first_name_err ?>" />
 											</div>
 										</div>
 										<div class="six columns <?= $last_name_err ? 'error' : ''; ?>">
 											<div class="controls">
 											<label class="cooper" for="last_name">Your last name</label>
-												<input type="text" id="last_name" name="last_name" maxlength="64" value="<?= mb_strlen($last_name_err) > 0 ? '' : $last_name ?>" placeholder="<?= $last_name_err ?>" />
+												<input type="text" id="last_name" name="last_name" maxlength="64" value="<?= strlen($last_name_err) > 0 ? '' : $last_name ?>" placeholder="<?= $last_name_err ?>" />
 											</div>
 										</div>
 									</div>
@@ -324,13 +326,13 @@ else :
 										<div class="six columns <?= $dads_name_err ? 'error' : ''; ?>">
 											<label class="cooper" for="dads_name">Dad's name</label>
 											<div class="controls">
-												<input type="text" id="dads_name" name="dads_name" maxlength="64" value="<?= mb_strlen($dads_name_err) > 0 ? '' : $dads_name ?>" placeholder="<?= $dads_name_err ?>" />
+												<input type="text" id="dads_name" name="dads_name" maxlength="64" value="<?= strlen($dads_name_err) > 0 ? '' : $dads_name ?>" placeholder="<?= $dads_name_err ?>" />
 											</div>
 										</div>
 										<div class="six columns <?= $contact_number_err ? 'error' : ''; ?>">
 											<label class="cooper" for="contact_number">Contact Number</label>
 											<div class="controls">
-												<input type="text" id="contact_number" name="contact_number" maxlength="64" value="<?= mb_strlen($contact_number_err) > 0 ? '' : $contact_number ?>" placeholder="<?= $contact_number_err ?>" />
+												<input type="text" id="contact_number" name="contact_number" maxlength="64" value="<?= strlen($contact_number_err) > 0 ? '' : $contact_number ?>" placeholder="<?= $contact_number_err ?>" />
 											</div>
 										</div>
 									</div>
@@ -338,7 +340,7 @@ else :
 										<div class="twelve columns <?= $contact_number_err ? 'error' : ''; ?>">
 											<label class="cooper" for="your_email">Your email address</label>
 											<div class="controls">
-												<input type="text" id="your_email" name="your_email" maxlength="128" value="<?= mb_strlen($your_email_err) > 0 ? '' : $your_email ?>" class="input-large" placeholder="<?= $your_email_err ?>" />
+												<input type="text" id="your_email" name="your_email" maxlength="128" value="<?= strlen($your_email_err) > 0 ? '' : $your_email ?>" class="input-large" placeholder="<?= $your_email_err ?>" />
 											</div>
 										</div>
 									</div>
@@ -404,16 +406,17 @@ else: // $competition_running
 <?
 
 endif; // $competition_running
-
-require_once('assets/overlays.php');
-
+require_once('./assets/overlays.php');
 ?>
 			</div><!-- .stage -->
+<?
+?>
+
 		</div> <!-- .container -->
 </div><!-- #main -->
 </div><!-- #wrap -->
 <?
-require_once('assets/scripts.php');
+require_once('./assets/scripts.php');
 ?>
 <script>
 var your_state_val = '<?= $your_state ?>', your_branch_val = '<?= $your_branch ?>';
@@ -424,5 +427,5 @@ $(function(){
 });
 </script>
 <?
-require_once('assets/foot.php');
+require_once('./assets/foot.php');
 ?>

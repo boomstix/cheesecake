@@ -1,6 +1,6 @@
 <?
 
-require_once('assets/config.php');
+require_once('./assets/config.php');
 
 //
 $loggedin = false;
@@ -95,7 +95,7 @@ if (isset($_SESSION['logged_in'])) {
 	
 }
 
-require_once('assets/head.php');
+require_once('./assets/head.php');
 
 
 ?>
@@ -207,5 +207,5 @@ endif; // db_err
 </div>
 
 <?
-require_once('assets/foot.php');
+require_once('./assets/foot.php');
 ?>
