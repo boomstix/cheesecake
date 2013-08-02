@@ -52,7 +52,7 @@ if (isset($_SESSION['logged_in'])) {
 					$db_ex = 'update register approve statement failed';
 				}
 				// register the approve
-				$stmt = $conn->prepare("INSERT INTO approved (`id`, `register_id`) VALUES (max(id)+1, :id)");
+				$stmt = $conn->prepare("INSERT INTO approved (`id`, `register_id`) select (ifnull(min(id),0) + 1), :id from approved;");
 				if (!$stmt->execute(array(':id' => $_POST['approve'])))
 				{
 					$db_err = true;

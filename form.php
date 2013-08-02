@@ -27,6 +27,7 @@ $your_branch = null;
 $your_branch_err = '';
 
 $why_for = null;
+$your_receipt = null;
 
 $agree_terms = null;
 $agree_terms_err = '';
@@ -123,6 +124,7 @@ if ($image_submitted || $submitted) {
 	}
 
 	$why_for = isset($_POST['why_for']) ? $_POST['why_for'] : array();
+	$your_receipt = isset($_POST['your_receipt']) ? $_POST['your_receipt'] : null;
 	
 	$agree_terms = isset($_POST['agree_terms']) ? strtolower(substr($_POST['agree_terms'], 0, 2)) == 'on' : false;
 	if ($submitted) {
@@ -170,8 +172,8 @@ if ($image_submitted || $submitted) {
 					}
 					else {
 						$stmt = $conn->prepare("
-INSERT INTO `register` (`first_name`,`last_name`,`dads_name`,`your_email`,`contact_number`,`your_branch`,`img_guid`,`img_ext`,`img_landscape`,`ip_address`,`why_for`,`created_at`)
-VALUES (:first_name,:last_name,:dads_name,:your_email,:contact_number,:your_branch,:img_guid,:img_ext,:img_landscape,:ip_address,:why_for,now())");
+INSERT INTO `register` (`first_name`,`last_name`,`dads_name`,`your_email`,`contact_number`,`your_branch`,`img_guid`,`img_ext`,`img_landscape`,`ip_address`,`why_for`,`your_receipt`,`created_at`)
+VALUES (:first_name,:last_name,:dads_name,:your_email,:contact_number,:your_branch,:img_guid,:img_ext,:img_landscape,:ip_address,:why_for,:your_receipt,now())");
 
 						if (!$stmt->execute(array(
 							':first_name' => $first_name,
@@ -184,7 +186,8 @@ VALUES (:first_name,:last_name,:dads_name,:your_email,:contact_number,:your_bran
 							':img_ext' => $img_ext,
 							':img_landscape' => $img_landscape == 1,
 							':ip_address' => $_SERVER['REMOTE_ADDR'],
-							':why_for' => $why_for
+							':why_for' => $why_for,
+							':your_receipt' => $your_recipt
 							))
 						)
 						{
@@ -324,23 +327,29 @@ else :
 									</div>
 									<div class="row form-elem">
 										<div class="six columns <?= $dads_name_err ? 'error' : ''; ?>">
-											<label class="cooper" for="dads_name">Dad's name</label>
+											<label class="cooper" for="dads_name">Your Dad's name</label>
 											<div class="controls">
 												<input type="text" id="dads_name" name="dads_name" maxlength="64" value="<?= strlen($dads_name_err) > 0 ? '' : $dads_name ?>" placeholder="<?= $dads_name_err ?>" />
 											</div>
 										</div>
 										<div class="six columns <?= $contact_number_err ? 'error' : ''; ?>">
-											<label class="cooper" for="contact_number">Contact Number</label>
+											<label class="cooper" for="contact_number">Your contact Number</label>
 											<div class="controls">
 												<input type="text" id="contact_number" name="contact_number" maxlength="64" value="<?= strlen($contact_number_err) > 0 ? '' : $contact_number ?>" placeholder="<?= $contact_number_err ?>" />
 											</div>
 										</div>
 									</div>
 									<div class="row form-elem">
-										<div class="twelve columns <?= $contact_number_err ? 'error' : ''; ?>">
+										<div class="six columns <?= $contact_number_err ? 'error' : ''; ?>">
 											<label class="cooper" for="your_email">Your email address</label>
 											<div class="controls">
 												<input type="text" id="your_email" name="your_email" maxlength="128" value="<?= strlen($your_email_err) > 0 ? '' : $your_email ?>" class="input-large" placeholder="<?= $your_email_err ?>" />
+											</div>
+										</div>
+										<div class="six columns">
+											<label class="cooper" for="your_receipt">Your receipt number</label>
+											<div class="controls">
+												<input type="text" id="your_receipt" name="your_receipt" maxlength="32" value="<?= $your_receipt ?>" />
 											</div>
 										</div>
 									</div>
@@ -364,7 +373,7 @@ else :
 									</div>
 									<div class="row form-elem">
 										<div class="twelve columns">
-											<label class="cooper" for="why_for">Why we should pimp up your dad</label>
+											<label class="cooper" for="why_for">Why we should pimp up your Dad</label>
 											<div class="controls">
 													<textarea id="why_for" name="why_for"><?= stripslashes($why_for) ?></textarea>
 											</div>

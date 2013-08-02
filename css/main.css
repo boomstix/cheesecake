@@ -84,10 +84,6 @@ body {
 	background-repeat: repeat;
 }
 
-.reveal-modal {
-	border-radius: 5px;
-}
-
 .container {
 	min-height: 100%;
 	max-width: 1292px;
@@ -131,7 +127,7 @@ h2 {
 	margin: 0 auto;
 	width: 530px;
 	height: 80px;
-	background: url(../img/ribbon-red.png) no-repeat top center;
+	background: url(../img/red-ribbon-form.png) no-repeat top center;
 	text-indent: -9999px;
 }
 
@@ -139,7 +135,7 @@ h2 {
 	margin: 0 auto;
 	width: 530px;
 	height: 80px;
-	background: url(../img/ribbon-red-home.png) no-repeat top center;
+	background: url(../img/red-ribbon-home.png) no-repeat top center;
 	text-indent: -9999px;
 }
 
@@ -228,6 +224,7 @@ body.vote .row .image {
 
 body.enter .column.enter {
 	padding-top: 30px;
+	text-align: center;
 }
 
 div.enter a {
@@ -307,6 +304,7 @@ div.enter a {
 	width: 215px;
 	height: 70px;
 	text-indent: -9999px;
+	margin-left: 22px;
 }
 
 .placeholder {
@@ -346,6 +344,12 @@ div.enter a {
 	border-color: #a57f6f #a57f6f #382c27 #a57f6f;
 }
 
+.admin tc,
+.admin label,
+.admin input[type="password"],
+.admin input[type="text"] {
+	color: #000;
+}
 
 .error input:focus, input.error:focus, .error textarea:focus, textarea.error:focus {
 	outline-color: #a57f6f;
@@ -517,12 +521,15 @@ span.file-input-name {
 	z-index: 15;
 	color: #fff;
 	font-size: 12px;;
-	margin-top: 35px;
+	margin-top: 200px;
 	margin-left: 35px;
 	overflow: hidden;
+	text-align: center;
 	text-overflow: ellipsis;
-	max-width: 232px;
+	width: 232px;
 	white-space: nowrap;
+	font-family: 'cooper-black-std', sans-serif;
+	color: #f2db29;
 }
 
 /* the picture frames */
@@ -738,5 +745,11 @@ div.img-layer-inner img {
 	width: 230px;
 	margin: 10px;
 	background-color: #000;
+}
+
+/* modal styles */
+
+.reveal-modal {
+	border-radius: 5px;
 }
 

@@ -129,16 +129,33 @@ $(function () {
 
 	function disableButtons() {
 		$('button').attr('disabled', 'disabled');
-		$('button').fadeTo(200, 50);
+		$('button').hide();
+	}
+	
+	function testUploadImage() {
+		if ($('#upload_image').val() != '') {
+			$('#upload_button').removeAttr('disabled');
+			$('#upload_button').fadeIn();
+			$('.text-layer').html('Click button to<br />upload your image');
+		}
+		else {
+			$('#upload_button').attr('disabled', 'disabled');
+			$('#upload_button').fadeOut();
+			$('.text-layer').html('Click to select your image');
+		}
 	}
 	
 	$('#upload_button').on('click', function(e) {
 		if ($('#upload_image').val() != '') { // c:
 			setTimeout(disableButtons, 50)	// a:
+			$('.text-layer').html('Uploading ...');
 		}
 		else {	// b:
 			e.preventDefault();
 		}
 	});
+	
+	$('#upload_image').on('change', testUploadImage);
+	testUploadImage();
 	
 });
