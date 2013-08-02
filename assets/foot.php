@@ -11,7 +11,13 @@
 		endif;
 		?>
 <footer>
-The Cheesecake Shop <a href="http://www.cheesecake.com.au">www.cheesecake.com.au</a>
+	<div class="stage">
+<a href="http://www.cheesecake.com.au" class="badge">The Cheesecake Shop</a>
+<a href="#terms-modal" data-reveal-id="terms-modal" class="terms">Terms and Conditions</a>
+<span class="sep">|</span>
+<a href="http://www.cheesecake.com.au" class="url">www.cheesecake.com.au</a>
+<a href="http://www.cheesecake.com.au" class="logo">The Cheesecake Shop</a>
+	</div>
 </footer>
 	</body>
 </html>

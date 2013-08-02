@@ -404,28 +404,11 @@ else: // $competition_running
 <?
 
 endif; // $competition_running
+
+require_once('assets/overlays.php');
+
 ?>
 			</div><!-- .stage -->
-
-			<!-- Modal -->
-			<div id="terms-modal" class="reveal-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-body">
-					<p>Terms and Conditions</p>
-				</div>
-				<div class="modal-footer">
-					<a class="close-reveal-modal" data-dismiss="modal" aria-hidden="true">&times;</a>
-				</div>
-			</div>
-			
-			<div id="win-modal" class="reveal-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-body">
-					<p>What you can win!</p>
-				</div>
-				<div class="modal-footer">
-					<a class="close-reveal-modal" data-dismiss="modal" aria-hidden="true">&times;</a>
-				</div>
-			</div>
-			
 		</div> <!-- .container -->
 </div><!-- #main -->
 </div><!-- #wrap -->

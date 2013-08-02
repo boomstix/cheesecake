@@ -188,6 +188,11 @@ require_once('assets/head.php');
 		<h2>Pimp Up Your Dad</h2>
 		
 		<h3>Enter your dad for a chance to win</h3>
+		
+		<a href="#" data-reveal-id="win-modal" class="what-can-i-win">What can I win?</a>
+
+		<a href="#" class="enter-your-dad">Enter your Dad</a>
+
 <?
 
 if ($competition_running) :
@@ -274,20 +279,6 @@ if ($competition_running) :
 		<? endif; ?>
 		
 	</div>
-
-			<div id="success-modal" class="reveal-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-body">
-					<h4>Yay! Thanks for entering!</h4>
-					<p>We love your Dad's guts cos you know you do.</p>
-					<p>Once your entry is approved, your old man's head will appear for people to rate.</p>
-					<p>We really hope he wasn't hit with the ugly stick,<br/>
-					unless he's so dropped pie that its hilarious ..</p>
-					<p>Now get out and vote!</p>
-				</div>
-				<div class="modal-footer">
-					<a class="close-reveal-modal" data-dismiss="modal" aria-hidden="true">&times;</a>
-				</div>
-			</div>
 			<?
 			
 else: // $competition_running
@@ -302,15 +293,17 @@ else: // $competition_running
 <?
 
 endif; // $competition_running
-?>
 
+require_once('assets/overlays.php');
+?>
 	</div><!-- .stage -->
 </div><!-- .container -->
 </div><!-- #main -->
 </div><!-- #wrap -->
 <?
 require_once('assets/scripts.php');
-?><script>
+?>
+<script>
 $(function(){
 
 	if (location.search == '?entry_success') {

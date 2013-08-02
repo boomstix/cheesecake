@@ -14,17 +14,70 @@ html, body {
 
 #main {
 	overflow:auto;
-	padding-bottom: 60px;
+	padding-bottom: 54px;
 }  /* must be same height as the footer */
 
 footer {
 	display: block;
 	position: relative;
-	margin-top: -60px; /* negative value of footer height */
-	height: 60px;
+	margin-top: -54px; /* negative value of footer height */
+	height: 54px;
 	clear:both;
 	background-color: #00782c;
-} 
+	background-image: url(../img/footer-bg.png);
+	background-repeat: repeat-w;
+}
+
+footer a {
+	display: block;
+	float: left;
+}
+
+footer .stage {
+	height: 53px;
+}
+
+footer a.badge {
+	text-indent: 9999px;
+	width: 85px;
+	height: 87px;
+	background-image: url(../img/footer-badge.png);
+	background-repeat: no-repeat;
+	margin-top: -40px;
+	margin-left: 40px;
+	text-indent: -9999px;
+}
+
+footer a.terms {
+	margin-top: 20px;
+	margin-left: 10px;
+	text-decoration: none;
+}
+
+footer span.sep {
+	display: block;
+	float: left;
+	margin-top: 20px;
+	margin-left: 10px;
+	color: #fff;
+}
+
+footer a.url {
+	margin-top: 20px;
+	margin-left: 10px;
+}
+
+footer a.logo {
+	display: block;
+	text-indent: 9999px;
+	width: 198px;
+	height: 73px;
+	background-image: url(../img/footer-logo.png);
+	background-repeat: no-repeat;
+	margin-top: -30px;
+	text-indent: -9999px;
+	float: right;
+}
 
 body {
 	background-image: url(../img/bg-tile.png);
@@ -40,6 +93,7 @@ body {
 	max-width: 1292px;
 	margin: 0 auto;
 	background: url(../img/bg-home.jpg) no-repeat top center;
+	position: relative;
 }
 
 body.enter .container {
@@ -53,6 +107,7 @@ body.enter .container {
 	background: rgba(255, 255, 255, 0.9);
 	border-radius: 3px;
 }
+
 .content p {
 	font-size: 16px;
 }
@@ -92,7 +147,7 @@ a:link {
 	color: #fff;
 	text-decoration: underline;
 }
-a:hover, a:active, a:focus {
+a:hover, a:visited, a:active, a:focus {
 	color: #fff;
 	text-decoration: none;
 }
