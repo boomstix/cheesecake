@@ -206,26 +206,26 @@ $(function () {
 		}
 		
 		function prev() {
-			console.log('prev');
+			//console.log('prev');
 			currentIx = (currentIx == 0) ? maxIx : currentIx - 1;
 			showCurrent();
 		}
 		
 		function next() {
-			console.log('next');
+			//console.log('next');
 			currentIx = (currentIx == maxIx) ? 0 : currentIx + 1;
 			showCurrent();
 		}
 		
 		function reveal() {
-			console.log('reveal');
+			//console.log('reveal');
 			$('div.prize', holder).remove();
 			holder.append(elems[currentIx].clone().hide());
 			$('div.prize', holder).fadeIn(400);
 		}
 		
 		function showCurrent() {
-			console.log('showCurrent');
+			//console.log('showCurrent');
 			$('div.prize', holder).fadeOut(400, reveal);
 		}
 		
@@ -233,7 +233,7 @@ $(function () {
 		
 	}
 	var v = new Slideshow();
-	// $('.slideshow div').orbit();
-	/* */
+	
+	//alert($(window).width());
 	
 });

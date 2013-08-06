@@ -136,7 +136,7 @@ h2 a { display: block; width: 100%; height: 100%;}
 .enter h3 {
 	margin: 0 auto;
 	width: 530px;
-	height: 100px;
+	height: 90px;
 	background: url(../img/red-ribbon-form.png) no-repeat top center;
 	text-indent: -9999px;
 }
@@ -144,7 +144,7 @@ h2 a { display: block; width: 100%; height: 100%;}
 .vote h3 {
 	margin: 0 auto;
 	width: 530px;
-	height: 100px;
+	height: 90px;
 	background: url(../img/red-ribbon-home.png) no-repeat top center;
 	text-indent: -9999px;
 }
@@ -214,122 +214,7 @@ a:hover, a:visited, a:active, a:focus {
 }
 
 .form {
-	padding-top: +0px;
-}
-
-@media (max-width: 439px) {
-
-	body {
-		background-image: none;
-		background-color: #000;
-	}
-
-	.stage,
-	.container {
-		height: auto;
-	}
-
-	.container {
-		background: url(../img/bg-home-mob.jpg) no-repeat top center;
-	}
-
-	body.enter .container {
-		background: url(../img/bg-enter-mob.jpg) no-repeat top center;
-	}
-
-
-	.container > .stage {
-		padding-top: 100px;
-	}
-	.enter h3,
-	.vote h3 {
-		width: 100%;
-	}
-	.what-can-i-win {
-		position: relative;
-		float: left;
-		top: inherit;
-		left: inherit;
-		margin-top: -100px;
-		margin-left: -10px;
-	}
-	
-	.enter-your-dad {
-		position: relative;
-		float: right;
-		top: inherit;
-		right: inherit;
-		margin-top: -100px;
-		margin-right: -10px;
-	}
-
-	.btn-back {
-		position: relative;
-		float: right;
-		top: inherit;
-		right: inherit;
-		margin-top: -90px;
-		margin-right: 10px;
-	}
-
-	.form {
-		padding-top: 20px;
-	}
-	
-	#main {
-		overflow:initial;
-		padding-bottom: 10px;
-	}  /* must be same height as the footer */
-
-	footer {
-		position: relative;
-		display: block;
-		background-position: bottom center;
-		background-repeat: repeat-x;
-		background-color: #000;
-		height: 100px;
-	}
-
-	.badge {
-		display: none;
-	}
-	
-	footer a.logo
-	{
-		display: block;
-		margin: auto;
-		position: absolute;
-		left: 60px;
-		top: 0px;
-	}
-	
-	footer a.terms {
-		position: absolute;
-		top: 60px;
-		left: 10px;
-	}
-	
-	footer span.sep {
-		position: absolute;
-		top: 60px;
-		left: 145px;
-	}
-	
-	footer a.url {
-		position: absolute;
-		top: 60px;
-		left: 160px;
-	}
-	
-	div.enter {
-		padding-bottom: 30px;
-	} 
-	
-	.vs span {
-		margin: 20px auto;
-	}
-
-	
+	padding-top: 0px;
 }
 
 .vert-outer {
@@ -395,42 +280,6 @@ div.enter a {
 	margin: 130px auto 0;
 }
 
-@media (min-width: 439px) {
-	
-	.row
-	#wrap,
-	#main,
-	.container,
-	.stage,
-	footer .stage,
-	footer {
-		min-width: 960px;
-		
-	}
-
-
-}
-
-@media (max-width: 439px) {
-
-	.columns, .column {
-		padding: 0 15px;
-	}
-
-	.vs {
-		height: inherit;
-	}
-	.vs span {
-		margin: 20px auto;
-	}
-	
-	#main {
-		padding-bottom: 60px;
-	}
-	.end {
-		margin-left: inherit;
-	}
-}
 
 .image {
 	width: 320px;
@@ -467,7 +316,7 @@ div.enter a {
 	height: 45px;
 	background-image: url(../img/ribbon-gold-bg.png);
 	margin: auto;
-	padding: 12px 32px 12px 16px;
+	padding: 9px 32px 12px 16px;
 	font-size: 18px;
 	white-space: nowrap;
 	overflow: hidden;
@@ -556,7 +405,7 @@ div.enter a {
 
 .admin tc,
 .admin label,
-.admin small a,
+.admin .content a,
 .admin input[type="password"],
 .admin input[type="text"] {
 	color: #000;
@@ -829,7 +678,6 @@ div.text-layer {
 	color: #f2db29;
 	font-size: 20px;
 	text-align: center;
-	padding: 110px 30px 10px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
@@ -841,6 +689,12 @@ div.text-layer {
 	-webkit-transition: opacity 0.5s ease;
 	-moz-transition: opacity 0.5s ease;
 	-o-transition: opacity 0.5s ease;
+}
+.horz div.text-layer {
+	padding: 110px 30px 10px;
+}
+.vert div.text-layer {
+	padding: 140px 30px 10px;
 }
 
 .error div.text-layer {
@@ -1121,10 +975,309 @@ h4.cooper {
 	margin: 6px auto 16px auto;
 }
 
+@media (min-width: 439px) {
+	
+	.row
+	#wrap,
+	#main,
+	.container,
+	.stage,
+	footer .stage,
+	footer {
+		min-width: 960px;
+	}
 
-@media (max-width: 439px) {
+}
+
+
+@media (max-width: 440px;) {
+/* Styles */
+
+	body {
+		background-image: none;
+		background-color: #000;
+	}
+
+	.columns, .column {
+		padding: 0 15px;
+	}
+
+	.vs {
+		height: inherit;
+	}
+	.vs span {
+		margin: 5px auto;
+	}
+	
+	#main {
+		overflow:initial;
+		padding-bottom: 54px;
+	}  /* must be same height as the footer */
+
+	.end {
+		margin-left: inherit;
+	}
+
+	.stage,
+	.container {
+		height: auto;
+	}
+
+	.container {
+		background: url(../img/mob/bg-home.jpg) no-repeat top center;
+	}
+
+	body.enter .container {
+		background: url(../img/mob/bg-home.jpg) no-repeat top center;
+	}
+
+	h2 {
+		width: 321px;
+		height: 127px;
+		background-image: url(../img/mob/pimp-up-logo-home.png);
+	}
+	
+	.enter h3,
+	.vote h3 {
+		width: 320px;
+		height: 51px;
+		margin-top: 140px;
+	}
+	
+	.vote h3 {
+		background-image: url(../img/mob/red-ribbon-home.png);
+	}
+
+	.enter h3 {
+		background-image: url(../img/mob/red-ribbon-form.png);
+	}
+
+	.what-can-i-win {
+		top: 200px;
+		left: 25px;
+		width: 279px;
+		height: 61px;
+		margin: 0 auto;
+		background-image: url(../img/mob/btn-what-can-i-win.png);
+	}
+	.what-can-i-win:hover {
+		background-position: 0 -62px;
+	}
+	
+	.enter-your-dad {
+		top: 130px;
+		left: 25px;
+		right: inherit;
+		width: 279px;
+		height: 61px;
+		margin: 0 auto;
+		background-position: 0 0;
+		background-image: url(../img/mob/btn-enter-your-dad.png);
+	}
+	.enter-your-dad:hover {
+		background-position: 0 -62px;
+	}
+	
+	.btn-back {
+		top: 130px;
+		left: 25px;
+		right: inherit;
+		width: 279px;
+		height: 61px;
+		margin: 0 auto;
+		background-position: 0 0;
+		background-image: url(../img/mob/btn-back.png);
+	}
+	
+	.btn-back:hover {
+		background-position: 0 -62px;
+	}
+
+	.form {
+		padding-top: 10px;
+	}
+	
+	.ribbon {
+		color: #fee05e;
+	}
+	
+	.dads-name {
+		background-image: none;
+	}
+	
+	.image {
+		height: 240px;
+	}
+	
+	.cta {
+		display: none;
+	}
+
+	footer {
+		position: relative;
+		display: block;
+		background-position: bottom center;
+		background-repeat: repeat-x;
+		background-color: #000;
+		height: 100px;
+	}
+	
+	.badge {
+		display: none;
+	}
+	
+	footer a.logo
+	{
+		display: block;
+		margin: auto;
+		position: absolute;
+		left: 60px;
+		top: 0px;
+	}
+	
+	footer a.terms {
+		position: absolute;
+		top: 60px;
+		left: 10px;
+	}
+	
+	footer span.sep {
+		position: absolute;
+		top: 60px;
+		left: 145px;
+	}
+	
+	footer a.url {
+		position: absolute;
+		top: 60px;
+		left: 160px;
+	}
+	
+	div.enter {
+		padding-bottom: 30px;
+	} 
+	
+	.vs span {
+		margin: 20px auto;
+		width: 64px;
+		height: 35px;
+		background-image: url(../img/mob/versus.png);
+	}
+
 	#win-modal {
-		width: 400px;
+		width: 320px;
 		margin-left: -46%;
 	}
+	
+	#win-modal .prize {
+		width: 200px;
+		margin: 0 auto;
+	}
+	
+	#win-modal .prize-image {
+		width: 200px;
+		height: 184px;
+	}
+	#win-modal .prize-image img {
+		width: 200px;
+		height: 184px;
+	}
+
+	.vote-count {
+		width: 120px;
+		height: 35px;
+		background-image: url(../img/mob/score-bg.png);
+		margin-top: -26px;
+		font-size: 9px;
+	}
+
+	.vote-count .count {
+		font-size: 14px;
+	}
+	
+	#upload_button {
+		margin-left: 52px;
+	}
+	
+	span.file-input-name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	
+	.vert span.file-input-name {
+		margin-top: 150px;
+		margin-left: 35px;
+		width: 200px;
+	}
+
+	.vert span.file-input-name {
+		margin-top: 150px;
+		margin-left: 15px;
+		width: 140px;
+	}
+
+	/* the picture frames */
+
+	div.frame-holder.horz,
+	.horz .frame {
+		width: 220px;
+		height: 168px;
+	}
+
+	div.frame-holder.vert,
+	.vert .frame {
+		height: 220px;
+		width: 168px;
+	}
+
+	.horz div.img-layer-outer,
+	.horz div.img-layer-inner,
+	.horz .frame-inner
+	{
+		width: 200px;
+		height: 148px;
+	}
+
+	.vert div.img-layer-outer,
+	.vert div.img-layer-inner,
+	.vert .frame-inner {
+		height: 200px;
+		width: 148px;
+	}
+
+	.horz .frame-layer {
+		background-image: url(../img/mob/frame-horz.png);
+	}
+
+	.vert .frame-layer {
+		background-image: url(../img/mob/frame-vert.png);
+	}
+
+	.horz div.text-layer {
+		padding: 40px 30px 10px;
+	}
+	.vert div.text-layer {
+		padding: 70px 30px 10px;
+	}
+
+	div.pimp-layer {
+		background-image: url(../img/pimp-up.png);
+		width: 140px;
+		height: 90px;
+	}
+
+	.horz div.img-layer-inner input[type="image"],
+	.horz div.img-layer-inner img {
+		max-width: 200px;
+		max-height: 148px;
+	}
+
+	.vert div.img-layer-inner input[type="image"],
+	.vert div.img-layer-inner img {
+		max-height: 200px;
+		max-width: 148px;
+	}
+
+
+	
 }

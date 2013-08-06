@@ -161,7 +161,7 @@ else :
 		<td><?= $data['dads_name'] ?></td>
 		<td><?= $data['created_at'] ?></td>
 		<td><?= $data['contact_number'] ?></td>
-		<td><?= $data['your_email'] ?></td>
+		<td><a href="entrant.php?id=<?= $data['id'] ?>"><?= $data['your_email'] ?></a></td>
 		<td class="text-center"><?= $data['battle_count'] ?></td>
 		<td class="text-center"><strong><?= $data['vote_count'] ?></strong></td>
 		<td class="text-center"><?= $data['ratio'] == 0 ? 0 : round(1 / $data['ratio'] * 100, 2) ?>%</td>
