@@ -21,13 +21,14 @@ $entry_data = array();
 
 if ($submitted) {
 
-	//if (SHA1($_POST['username'] . $_POST['password']) == $leaderboard_login_hash) {
-		$_SESSION['logged_in'] = session_id;
-	//}
+	if (SHA1($_POST['username'] . $_POST['password']) == $leaderboard_login_hash) {
+		setcookie("orfentic", true, time()+3600);
+		header('Location: entries.php');
+	}
 	
 }
 
-if (isset($_SESSION['logged_in'])) {
+if (isset($_COOKIE['orfentic'])) {
 	
 	$loggedin = true;
 	
@@ -52,7 +53,7 @@ if (isset($_SESSION['logged_in'])) {
 					$db_ex = 'update register approve statement failed';
 				}
 				// register the approve
-				$stmt = $conn->prepare("INSERT INTO approved (`id`, `register_id`) select (ifnull(min(id),0) + 1), :id from approved;");
+				$stmt = $conn->prepare("INSERT INTO approved (`id`, `register_id`) select (ifnull(max(id),0) + 1), :id from approved;");
 				if (!$stmt->execute(array(':id' => $_POST['approve'])))
 				{
 					$db_err = true;
@@ -171,7 +172,7 @@ else :
 <input type="hidden" name="submit_button" value="" />
 <table class="table">
 <tbody><?
-			$itemsPerRow = 6;
+			$itemsPerRow = 5;
 			foreach ($entry_data as $ix => $data) : 
 				if ($ix % $itemsPerRow == 0) : ?> 
 	<tr><?

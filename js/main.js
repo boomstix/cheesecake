@@ -90,18 +90,27 @@ $(function () {
 		// setup the state render upon successful retrieval 
 		$.ajax({
 			dataType: "json",
-			url: "assets/stores.json",
+			url: "/assets/stores.json",
 			success: function(data, textStatus, jqXHR) {
-				var states = [{id:1,name:'NSW'},{id:2,name:'ACT'},{id:3,name:'VIC'},{id:4,name:'TAS'},{id:5,name:'QLD'},{id:6,name:'SA'},{id:7,name:'NT'},{id:8,name:'WA'}];
+				var states = [{region:'au',id:1,name:'NSW'},{region:'au',id:2,name:'ACT'},
+				{region:'au',id:3,name:'VIC'},{region:'au',id:4,name:'TAS'},
+				{region:'au',id:5,name:'QLD'},{region:'au',id:6,name:'SA'},
+				{region:'au',id:7,name:'NT'},{region:'au',id:8,name:'WA'},
+				{region:'nz',id:9,name:"NZ"}],
+				regionIx = 0, lastRegionID = 0;
 				// populate the states and attach the state change handler, and trigger it
 				your_state.empty();
 				your_state.append($('<option value="-1">Please select your state</option>'));
 				$.each(states, function(ix, el){
-					your_state.append($('<option value="'+el.id+'"'+(your_state_val == el.id ? ' selected="selected"' : '')+'>'+el.name+'</option>'));
+					if (el.region == region && el.region ){
+						your_state.append($('<option value="'+el.id+'"'+(your_state_val == el.id ? ' selected="selected"' : '')+'>'+el.name+'</option>'));
+						regionIx++;
+						lastRegionID = el.id;
+					}
 				});
 				your_state.on('change', function(e){
 					your_branch.empty();
-					your_branch.append($('<option value="-1">Please select'+(your_state.val() === '-1' ? ' your state' : ' your branch')+'</option>'));
+					your_branch.append($('<option value="-1">Please select'+(your_state.val() === '-1' ? ' your state' : ' your bakery')+'</option>'));
 					$.each(data, function(ix, el){
 						if (el.state_id == your_state.val()) {
 							your_branch.append($('<option value="'+el.store_id+'"'+(your_branch_val == el.store_id ? ' selected="selected"' : '')+'>'+el.store_name+'</option>'));
@@ -110,6 +119,10 @@ $(function () {
 					// setup the branch
 					your_branch.trigger('update');
 				});
+				if (regionIx == 1) {
+					your_state.val(lastRegionID);
+					your_state.hide();
+				}
 				your_state.change();
 			}
 		});
@@ -132,16 +145,19 @@ $(function () {
 		$('button').hide();
 	}
 	
+	var origMsg = $('.text-layer').html();
+
 	function testUploadImage() {
 		if ($('#upload_image').val() != '') {
 			$('#upload_button').removeAttr('disabled');
 			$('#upload_button').fadeIn();
-			$('.text-layer').html('Click button to<br />upload your image');
+			$('.text-layer').html($('.file-input-name').html());
+			$('.file-input-name').html('Click to chose<br />a different image');
 		}
 		else {
 			$('#upload_button').attr('disabled', 'disabled');
 			$('#upload_button').fadeOut();
-			$('.text-layer').html('Click to select your image');
+			$('.text-layer').html(origMsg);
 		}
 	}
 	
@@ -157,5 +173,67 @@ $(function () {
 	
 	$('#upload_image').on('change', testUploadImage);
 	testUploadImage();
+	
+	
+	$('.btn-facebook-share').on('click', function(){
+	
+		window.open(
+		'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href), 
+		'facebook-share-dialog', 
+		'width=626,height=436'
+		);
+		
+	});
+	
+	/* */
+	var Slideshow = function() {
+		var holder = $('.slideshow');
+		var prizes = $('.slideshow div.prize');
+		var leftNav = null, rightNav = null;
+		var elems = [];
+		var currentIx = 0, maxIx = 0;
+		
+		function setup() {
+			$.each(prizes, function(ix,el){
+				// console.log(el, $(el));
+				elems.push($(el).detach());
+			});
+			maxIx = elems.length -1;
+			// pack away the divs;
+			leftNav = $('<div class="left"></div>').appendTo(holder).on('click', prev);
+			rightNav = $('<div class="right"></div>').appendTo(holder).on('click', next);
+			reveal();
+		}
+		
+		function prev() {
+			console.log('prev');
+			currentIx = (currentIx == 0) ? maxIx : currentIx - 1;
+			showCurrent();
+		}
+		
+		function next() {
+			console.log('next');
+			currentIx = (currentIx == maxIx) ? 0 : currentIx + 1;
+			showCurrent();
+		}
+		
+		function reveal() {
+			console.log('reveal');
+			$('div.prize', holder).remove();
+			holder.append(elems[currentIx].clone().hide());
+			$('div.prize', holder).fadeIn(400);
+		}
+		
+		function showCurrent() {
+			console.log('showCurrent');
+			$('div.prize', holder).fadeOut(400, reveal);
+		}
+		
+		setup();
+		
+	}
+	var v = new Slideshow();
+	// $('.slideshow div').orbit();
+	/* */
 	
 });

@@ -185,14 +185,14 @@ require_once('./assets/head.php');
 <div class="container">
 	<div class="stage">
 		
-		<h2>Pimp Up Your Dad</h2>
-		
-		<h3>Enter your dad for a chance to win</h3>
-		
 		<a href="#" data-reveal-id="win-modal" class="what-can-i-win">What can I win?</a>
 
 		<a href="form.php" class="enter-your-dad">Enter your Dad</a>
 
+		<h2><a href="/">Pimp Up Your Dad</a></h2>
+		
+		<h3>Enter your dad for a chance to win</h3>
+		
 <?
 
 if ($competition_running) :
@@ -212,17 +212,24 @@ if ($competition_running) :
 					<div class="vert-outer vert-full">
 						<div class="vert-inner">
 
-							<div class="frame-holder<?= $dad1_datarow['img_landscape'] ? ' horz' : ' vert' ?>">
-								<input class="frame frame-layer" type="image" id="vote1" name="vote1" value="<?= $dad1_datarow['id'] ?>" src="img/shim.png" />
-								<div class="frame pimp-layer"></div>
-								<div class="frame-inner transp-layer"></div>
-								<div class="img-layer-outer vert-outer">
-									<div class="img-layer-inner vert-inner">
-									<img id="image-1" src="img/shim.png" />
+							<div class="row">
+								<div class="frame-holder<?= $dad1_datarow['img_landscape'] ? ' horz' : ' vert' ?>">
+									<input class="frame frame-layer" type="image" id="vote1" name="vote1" value="<?= $dad1_datarow['id'] ?>" src="img/shim.png" />
+									<div class="frame pimp-layer"></div>
+									<div class="frame-inner transp-layer"></div>
+									<div class="img-layer-outer vert-outer">
+										<div class="img-layer-inner vert-inner">
+										<img id="image-1" src="img/shim.png" />
+										</div>
 									</div>
 								</div>
+								<div class="vote-count cooper"><span class="count"><?= $dad1_datarow['vote_count'] ?></span> vote<?= ($dad1_datarow['vote_count'] == 1 ? '' : 's') ?></div>
 							</div>
-							<div class="vote-count cooper"><?= $dad1_datarow['vote_count'] . ' vote' . ($dad1_datarow['vote_count'] == 1 ? '' : 's') ?></div>
+							<div class="row">
+								<div class="column ribbon">				
+									<div class="dads-name cooper"><?= $dad1_datarow['dads_name'] ?></div>
+								</div>
+							</div>
 
 						</div>
 					</div>
@@ -236,39 +243,45 @@ if ($competition_running) :
 					<div class="vert-outer vert-full">
 						<div class="vert-inner">
 					
-							<div class="frame-holder<?= $dad2_datarow['img_landscape'] ? ' horz' : ' vert' ?>">
-								<input class="frame frame-layer" type="image" id="vote2" name="vote2" value="<?= $dad2_datarow['id'] ?>" src="img/shim.png" />
-								<div class="frame pimp-layer"></div>
-								<div class="frame-inner transp-layer"></div>
-								<div class="img-layer-outer vert-outer">
-									<div class="img-layer-inner vert-inner">
-									<img id="image-2" src="img/shim.png" />
+							<div class="row">
+
+								<div class="frame-holder<?= $dad2_datarow['img_landscape'] ? ' horz' : ' vert' ?>">
+									<input class="frame frame-layer" type="image" id="vote2" name="vote2" value="<?= $dad2_datarow['id'] ?>" src="img/shim.png" />
+									<div class="frame pimp-layer"></div>
+									<div class="frame-inner transp-layer"></div>
+									<div class="img-layer-outer vert-outer">
+										<div class="img-layer-inner vert-inner">
+										<img id="image-2" src="img/shim.png" />
+										</div>
 									</div>
 								</div>
+								<div class="vote-count cooper"><span class="count"><?= $dad2_datarow['vote_count'] ?></span> vote<?= ($dad2_datarow['vote_count'] == 1 ? '' : 's') ?></div>
+
 							</div>
-							<div class="vote-count cooper"><?= $dad2_datarow['vote_count'] . ' vote' . ($dad2_datarow['vote_count'] == 1 ? '' : 's') ?></div>
+							<div class="row">
+								<div class="column ribbon">
+									<div class="dads-name cooper"><?= $dad2_datarow['dads_name'] ?></div>
+								</div>
+							</div>
 
 						</div>
 					</div>
 
 				</div>
 			</div>
-
+			
 			<div class="row">
-				<div class="four offset-by-one column ribbon">
+				<div class="twelve column text-center">
+					<div class="cta">
 				
-					<div class="dads-name cooper"><?= $dad1_datarow['dads_name'] ?></div>
+					<p>This Father's Day The Cheesecake Shop is giving one special dad the chance to <strong>win the ultimate makeover worth <?= $prize_total ?></strong>.
+					<br/>
+					So, if you think your dad needs pimping up, <a href="form.php">click here to enter him</a> or choose one of the dads above to start voting.</p>
 					
-				</div>
-				<div class="two column">
-				</div>
-				<div class="four column ribbon end">
-						
-					<div class="dads-name cooper"><?= $dad2_datarow['dads_name'] ?></div>
-					
+					</div>
 				</div>
 			</div>
-			
+
 		</form>
 		<? endif; ?>
 		
@@ -281,7 +294,7 @@ else: // $competition_running
 
 <div class="content">
 	<h4 class="cooper">Oh Noes!</h4>
-	<p>We are sooo not accepting entries right now! Soooo sorry!!</p>
+	<p>We are not accepting entries right now. Sorry!!</p>
 </div>
 
 <?

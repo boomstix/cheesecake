@@ -4,7 +4,6 @@
 <head>
 
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width" />
 
 	<title>The Cheesecake Shop - Pimp My Dad</title>
 
@@ -12,9 +11,17 @@
 	<link rel="icon" href="http://www.cheesecake.com.au/media/favicon/default/favicon_1.ico" type="image/x-icon">
 	<link rel="shortcut icon" href="http://www.cheesecake.com.au/media/favicon/default/favicon_1.ico" type="image/x-icon">
 
-	<link rel="stylesheet" href="css/foundation.min.css" />
-	<link rel="stylesheet" href="css/main.css" />
+	<meta property="og:site_name" content="Pimp up dad"/>
+	<meta property="og:description" content="My dad's in the running to win a makeover worth <?= $prize_total ?> with The Cheesecake Shop."/>
+	<meta property="og:title" content="My dad needs pimping up!"/>
 
-	<script src="js/modernizr.foundation.js"></script>
+
+	<link rel="stylesheet" href="/css/foundation.min.css" />
+	<link rel="stylesheet" href="/css/main.css" />
+
+	<script src="/js/modernizr.foundation.js"></script>
+	<script>
+	var region = "<?= $region ?>";
+	</script>
 	
 </head>

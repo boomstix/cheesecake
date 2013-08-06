@@ -1,14 +1,17 @@
 <?
 
-$db_addr = '127.0.0.1';
+$db_addr = '127.0.0.1:4040';
 $db_user = 'cheese';
 $db_pass = 'cakeshop';
 $db_schema = 'cheesecake';
 
+$region = "nz";
+
 $support_email = 'cheese@cakeshop.com';
+$footer_url = 'www.cheesecake.com.au';
 
 $leaderboard_login_hash = '2589ae3b10daecb373857aec5fb76e06d7e278a2';
-$franchise_login_hash = '';
+$franchise_login_hash = '8e3f027190f91f2a845afd9a5d3b414916467405';
 
 $awsAccessKey = 'AKIAJNCR3PWSSU3RUHZA';
 $awsSecretKey = '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';
@@ -19,11 +22,15 @@ $img_domain = 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/';
 
 $analytics_acct = 'UA-1933701-10';
 $analytics_url = 'pimpupdad.com.au';
+$prize_total = "$10000";
+$region = 'au';
 
 $competition_running = true;
 
 // $analytics_acct = 'UA-1933701-11';
 // $analytics_url = 'pimpupdad.co.nz';
+// $prize_total = "$2500";
+// $region = 'nz';
 
 
 // Loosely validate australian phone number

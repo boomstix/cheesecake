@@ -25,7 +25,7 @@ footer {
 	clear:both;
 	background-color: #00782c;
 	background-image: url(../img/footer-bg.png);
-	background-repeat: repeat-w;
+	background-repeat: repeat-x;
 }
 
 footer a {
@@ -34,7 +34,7 @@ footer a {
 }
 
 footer .stage {
-	height: 53px;
+	height: 54px;
 }
 
 footer a.badge {
@@ -51,7 +51,6 @@ footer a.badge {
 footer a.terms {
 	margin-top: 20px;
 	margin-left: 10px;
-	text-decoration: none;
 }
 
 footer span.sep {
@@ -69,7 +68,7 @@ footer a.url {
 
 footer a.logo {
 	display: block;
-	text-indent: 9999px;
+	text-indent: -q9999px;
 	width: 198px;
 	height: 73px;
 	background-image: url(../img/footer-logo.png);
@@ -87,6 +86,7 @@ body {
 .container {
 	min-height: 100%;
 	max-width: 1292px;
+	min-width 960px;
 	margin: 0 auto;
 	background: url(../img/bg-home.jpg) no-repeat top center;
 	position: relative;
@@ -116,17 +116,27 @@ body.enter .container {
 h2 {
 	margin: 0 auto;
 	padding-top: 20px;
-	width: 320px;
-	height: 120px;
-	background: url(../img/logo-bg.png) no-repeat top center;
-	background-position: 0 10px;
+	width: 331px;
+	height: 132px;
+	background: url(../img/pimp-up-logo-home.png) no-repeat top center;
+	background-position: 0 0;
 	text-indent: -9999px;
 }
+
+h2:hover {
+	background-position: 0 3px;
+	transition: background-position 0.1s ease;
+	-webkit-transition: background-position 0.1s ease;
+	-moz-transition: background-position 0.1s ease;
+	-o-transition: background-position 0.1s ease;
+}
+
+h2 a { display: block; width: 100%; height: 100%;}
 
 .enter h3 {
 	margin: 0 auto;
 	width: 530px;
-	height: 80px;
+	height: 100px;
 	background: url(../img/red-ribbon-form.png) no-repeat top center;
 	text-indent: -9999px;
 }
@@ -134,7 +144,7 @@ h2 {
 .vote h3 {
 	margin: 0 auto;
 	width: 530px;
-	height: 80px;
+	height: 100px;
 	background: url(../img/red-ribbon-home.png) no-repeat top center;
 	text-indent: -9999px;
 }
@@ -158,13 +168,15 @@ a:hover, a:visited, a:active, a:focus {
 .what-can-i-win {
 	display: block;
 	position: absolute;
-	top: 0px;
+	top: 0;
 	left: 100px;
 	background-image: url(../img/btn-what-can-i-win.png);
 	background-position: 0 0;
+	background-repeat: no-repeat;
 	width: 190px;
 	height: 98px;
 	text-indent: -9999px;
+	/*background-color: rgba(255,255,255,0.3);*/
 }
 .what-can-i-win:hover {
 	background-position: 0 -98px;
@@ -173,26 +185,151 @@ a:hover, a:visited, a:active, a:focus {
 .enter-your-dad {
 	display: block;
 	position: absolute;
-	top: 10px;
+	top: 0;
 	right: 100px;
 	background-image: url(../img/btn-enter-your-dad.png);
-	background-position: 0 0;
+	background-position: 25px 10px;
+	background-repeat: no-repeat;
+	width: 190px;
+	height: 80px;
+	text-indent: -9999px;
+}
+.enter-your-dad:hover {
+	background-position: 25px -93px;
+}
+
+.btn-back {
+	display: block;
+	position: absolute;
+	top: 10px;
+	right: 125px;
+	background-image: url(../img/btn-back.png);
+	background-repeat: no-repeat;
 	width: 140px;
 	height: 71px;
 	text-indent: -9999px;
 }
-.enter-your-dad:hover {
+.btn-back:hover {
 	background-position: 0 -71px;
 }
 
 .form {
-	padding-top: 50px;
+	padding-top: +0px;
 }
 
-@media (max-width: 479px) {
+@media (max-width: 439px) {
+
+	body {
+		background-image: none;
+		background-color: #000;
+	}
+
+	.stage,
+	.container {
+		height: auto;
+	}
+
+	.container {
+		background: url(../img/bg-home-mob.jpg) no-repeat top center;
+	}
+
+	body.enter .container {
+		background: url(../img/bg-enter-mob.jpg) no-repeat top center;
+	}
+
+
+	.container > .stage {
+		padding-top: 100px;
+	}
+	.enter h3,
+	.vote h3 {
+		width: 100%;
+	}
+	.what-can-i-win {
+		position: relative;
+		float: left;
+		top: inherit;
+		left: inherit;
+		margin-top: -100px;
+		margin-left: -10px;
+	}
+	
+	.enter-your-dad {
+		position: relative;
+		float: right;
+		top: inherit;
+		right: inherit;
+		margin-top: -100px;
+		margin-right: -10px;
+	}
+
+	.btn-back {
+		position: relative;
+		float: right;
+		top: inherit;
+		right: inherit;
+		margin-top: -90px;
+		margin-right: 10px;
+	}
+
 	.form {
 		padding-top: 20px;
 	}
+	
+	#main {
+		overflow:initial;
+		padding-bottom: 10px;
+	}  /* must be same height as the footer */
+
+	footer {
+		position: relative;
+		display: block;
+		background-position: bottom center;
+		background-repeat: repeat-x;
+		background-color: #000;
+		height: 100px;
+	}
+
+	.badge {
+		display: none;
+	}
+	
+	footer a.logo
+	{
+		display: block;
+		margin: auto;
+		position: absolute;
+		left: 60px;
+		top: 0px;
+	}
+	
+	footer a.terms {
+		position: absolute;
+		top: 60px;
+		left: 10px;
+	}
+	
+	footer span.sep {
+		position: absolute;
+		top: 60px;
+		left: 145px;
+	}
+	
+	footer a.url {
+		position: absolute;
+		top: 60px;
+		left: 160px;
+	}
+	
+	div.enter {
+		padding-bottom: 30px;
+	} 
+	
+	.vs span {
+		margin: 20px auto;
+	}
+
+	
 }
 
 .vert-outer {
@@ -215,6 +352,7 @@ a:hover, a:visited, a:active, a:focus {
 body.vote .row .image {
 	padding: 0;
 	text-align: center;
+	min-width: 320px;
 }
 
 
@@ -240,18 +378,63 @@ div.enter a {
 
 .column {/*border: 1px solid red;*/}
 
+.columns, .column {
+	padding: 0 5px;
+}
+
+.vs {
+	height: 385px;
+}
+
 .vs span {
 	display: block;
 	width: 80px;
 	height: 45px;
 	background-image: url(../img/versus.png);
 	text-indent: -9999px;
-	margin: 150px auto 0;
+	margin: 130px auto 0;
+}
+
+@media (min-width: 439px) {
+	
+	.row
+	#wrap,
+	#main,
+	.container,
+	.stage,
+	footer .stage,
+	footer {
+		min-width: 960px;
+		
+	}
+
+
+}
+
+@media (max-width: 439px) {
+
+	.columns, .column {
+		padding: 0 15px;
+	}
+
+	.vs {
+		height: inherit;
+	}
+	.vs span {
+		margin: 20px auto;
+	}
+	
+	#main {
+		padding-bottom: 60px;
+	}
+	.end {
+		margin-left: inherit;
+	}
 }
 
 .image {
 	width: 320px;
-	height: 320px;
+	height: 385px;
 	text-align: center;
 }
 
@@ -267,6 +450,12 @@ div.enter a {
 	margin: -30px auto auto;
 	padding-top: 8px;
 	z-index: 30;
+	text-transform: uppercase;
+	font-size: 12px;
+}
+
+.vote-count .count {
+	font-size: 18px;
 }
 
 .vert .vote-count {
@@ -285,21 +474,38 @@ div.enter a {
 	text-overflow: ellipsis;
 }
 
+.cta {
+	background-image: url(../img/text-panel-bg.png);
+	background-repeat: no-repeat;
+	background-position: center -10px;
+	min-height: 100px;
+	font-size; 12px;
+	padding-top: 20px;
+}
+
+.cta a {
+	color: #c60f13;
+}
 
 /* form styles */
 
 #submit_button {
 	background-image: url(../img/btn-enter.png);
 	background-color: transparent;
+	background-position: 0 0;
 	border-width: 0px;
 	width: 215px;
 	height: 70px;
 	text-indent: -9999px;
 }
+#submit_button:hover {
+	background-position: 0 -70px;
+}
 
 #upload_button {
 	background-image: url(../img/btn-upload.png);
 	background-color: transparent;
+	background-position: 0 0;
 	border-width: 0px;
 	width: 215px;
 	height: 70px;
@@ -307,32 +513,36 @@ div.enter a {
 	margin-left: 22px;
 }
 
-.placeholder {
-	color: #c60f13 !important;
+#upload_button:hover {
+	background-position: 0 -69px;
+}
+
+.error .placeholder {
+	color: #83741D !important;
 	letter-spacing:0;
 	font-style: italic;
 }
 
-::-webkit-input-placeholder {
-	color: #c60f13 !important;
+.error ::-webkit-input-placeholder {
+	color: #83741D !important;
 	letter-spacing:0;
 	font-style: italic;
 }
 
-:-moz-placeholder {
-	color: #c60f13 !important;
+.error :-moz-placeholder {
+	color: #83741D !important;
 	letter-spacing:0;
 	font-style: italic;
 }
 
-::-moz-placeholder {
-	color: #c60f13 !important;
+.error ::-moz-placeholder {
+	color: #83741D !important;
 	letter-spacing:0;
 	font-style: italic;
 }
 
-:-ms-input-placeholder {
-	color: #c60f13 !important;
+.error :-ms-input-placeholder {
+	color: #83741D !important;
 	letter-spacing:
 	font-style: italic;
 }
@@ -346,6 +556,7 @@ div.enter a {
 
 .admin tc,
 .admin label,
+.admin small a,
 .admin input[type="password"],
 .admin input[type="text"] {
 	color: #000;
@@ -378,6 +589,7 @@ div.enter a {
 	-o-transition: border-color 0.5s ease;
 }
 
+.error .customSelect,
 .row .error input[type="text"], .row .error input[type="password"], .row .error input[type="date"], .row .error input[type="datetime"],
 .row .error input[type="email"], .row .error input[type="number"], .row .error input[type="search"], .row .error input[type="tel"],
 .row .error input[type="time"], .row .error input[type="url"], .row .error textarea, .row .error select,
@@ -406,7 +618,7 @@ div.enter a {
 	letter-spacing: 0;
 	font-family: 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
 	font-weight: bold;
-	padding: 10px;
+	padding: 8px 10px 10px;
 }
 
 .form .row.form-check {
@@ -425,15 +637,20 @@ label {
 label:after {
 	content: ':';
 }
+.mandatory label:after {
+	content: ': *';
+}
 label.checkbox:after {
 	content: '';
 }
 label.checkbox {
 	color: #fff;
 }
-
+.error label {
+	color: #fff;
+}
 .error .customSelectInner {
-	color: #c60f13;
+	color: #83741D;
 }
 
 span.customSelect {
@@ -441,10 +658,18 @@ span.customSelect {
 	border-style: solid;
 	border-color: #443630 #443630 #332823 #443630;
 	margin-bottom: 12px;
+	background-image: url(../img/select-arrow.png);
+	background-position: right 5px;
+	background-repeat: no-repeat;
+	padding-right: 5px;
+	font-style: italic;
 }
 
 .error span.customSelect {
 	border-color: #cf2026 #cf2026 #910b0f #cf2026;
+	background-image: url(../img/select-arrow.png);
+	background-position: right 5px;
+	background-repeat: no-repeat;
 }
 
 .jquery-checkbox-wrapper {
@@ -532,6 +757,11 @@ span.file-input-name {
 	color: #f2db29;
 }
 
+.vert span.file-input-name {
+	margin-top: 250px;
+	margin-left: 10px;
+}
+
 /* the picture frames */
 
 div.frame-holder {
@@ -580,6 +810,7 @@ div.frame-holder.vert {
 	display: block;
 	border-width: 0;
 	border-color: transparent;
+	background-repeat: no-repeat;
 }
 
 .horz .frame-layer {
@@ -598,7 +829,9 @@ div.text-layer {
 	color: #f2db29;
 	font-size: 20px;
 	text-align: center;
-	padding: 110px 30px 10px;;
+	padding: 110px 30px 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 	filter: alpha(opacity=100);
 	-moz-opacity: 1;
@@ -708,6 +941,7 @@ div.img-layer-outer {
 }
 div.img-layer-inner {
 	z-index: 5;
+	background-image: url(../img/bg-tile.png);
 }
 
 div.img-layer-inner input[type="image"],
@@ -726,7 +960,6 @@ div.img-layer-inner img {
 .vert div.img-layer-inner img {
 	max-height: 300px;
 	max-width: 230px;
-	margin: 10px auto;
 }
 
 .horz div.img-layer-outer,
@@ -735,7 +968,6 @@ div.img-layer-inner img {
 	width: 300px;
 	height: 230px;
 	margin: 10px;
-	background-color: #000;
 }
 
 .vert div.img-layer-outer,
@@ -744,12 +976,155 @@ div.img-layer-inner img {
 	height: 300px;
 	width: 230px;
 	margin: 10px;
-	background-color: #000;
 }
 
 /* modal styles */
 
-.reveal-modal {
-	border-radius: 5px;
+h4.cooper {
+	font-size: 22px;
+	text-transform: uppercase;
+	text-align: center;
 }
 
+.reveal-modal {
+	border-radius: 12px;
+	border: 2px solid #fff;
+	background-image: url(../img/overlay-bg.jpg);
+	background-position: bottom center;
+	background-repeat: repeat-x;
+	padding: 0 20px;
+}
+
+.reveal-modal p {
+	margin-bottom: 10px;
+}
+
+.reveal-modal .close-button {
+}
+
+.reveal-modal a.btn-facebook-share {
+	display: block;
+	background-image: url(../img/btn-fb-share.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 52px;
+	text-indent: -9999px;
+	margin: 10px 40px 10px;
+}
+
+.reveal-modal a.btn-facebook-share span {
+	visibility: hidden;
+}
+
+.reveal-modal a.btn-facebook-share:hover {
+	background-position: 0 -52px;
+}
+.reveal-modal a.btn-close.close-reveal-modal {
+	display: block;
+	background-image: url(../img/btn-keep-voting.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	width: 270px;
+	height: 84px;
+	text-indent: -9999px;
+	position: relative;
+	margin: -15px 0 0 -20px;
+}
+.reveal-modal a.btn-close.close-reveal-modal:hover {
+	background-position: 0 -83px;
+}
+.close-reveal-modal.times {
+	display: block;
+	background-image: url(../img/btn-close.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	width: 38px;
+	height: 30px;
+	text-indent: -9999px;
+	right: 0px !important;
+}
+.close-reveal-modal.times:hover {
+	background-position: 0 -32px;
+}
+
+.reveal-modal .right {
+	display: block;
+	background-image: url(../img/btn-arrow-right.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	width: 38px;
+	height: 38px;
+	margin: 100px -10px 100px 0;
+	text-indent: -9999px;
+	cursor: pointer;
+	float: right;
+}
+.reveal-modal .right:hover {
+	background-position: 0 -38px;
+}
+
+.reveal-modal .left {
+	display: block;
+	background-image: url(../img/btn-arrow-left.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	width: 38px;
+	height: 38px;
+	margin: 100px 0 100px -10px;
+	text-indent: -9999px;
+	cursor: pointer;
+	float: left;
+}
+.reveal-modal .left:hover {
+	background-position: 0 -38px;
+}
+
+#win-modal .slideshow {
+	position: relative;
+}
+#win-modal .prize {
+	text-align: center;
+}
+#win-modal .prize-image {
+	width: 261px;
+	height: 240px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 100%;
+}
+
+#win-modal .prize-image.personal-training {
+	background-image: url(../img/prizes/personal-training.png);
+}
+#win-modal .prize-image.fresh-get-up {
+	background-image: url(../img/prizes/fresh-get-up.png);
+}
+#win-modal .prize-image.hairstyle {
+	background-image: url(../img/prizes/hairstyle.png);
+}
+#win-modal .prize-image.new-bling {
+	background-image: url(../img/prizes/new-bling.png);
+}
+#win-modal .prize-image.manscaping {
+	background-image: url(../img/prizes/manscaping.png);
+}
+
+#win-modal .prize-type {
+	margin: 16px auto 6px auto;
+	font-size: 18px;
+}
+#win-modal .prize-value {
+	color: #c60f13;
+	font-size: 24px;
+	text-transform: initial;
+	margin: 6px auto 16px auto;
+}
+
+
+@media (max-width: 439px) {
+	#win-modal {
+		width: 400px;
+		margin-left: -46%;
+	}
+}

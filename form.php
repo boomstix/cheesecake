@@ -34,7 +34,7 @@ $agree_terms_err = '';
 
 $img_guid = null;
 $img_ext = null;
-$img_landscape = true;
+$img_landscape = null;
 
 $img_msg = 'Click to select<br> your image';
 $img_err = false;
@@ -69,16 +69,16 @@ if ($image_submitted || $submitted) {
 		
 			// calculate aspect ratio
 			list($width, $height, $type, $attr) = getimagesize($_FILES['upload_image']['tmp_name']);
-		
+			
 			$img_guid = generateGuid();
 			$img_ext = pathinfo($_FILES['upload_image']['name'], PATHINFO_EXTENSION);
 			$img_landscape = (($width / $height) >= 1) ? 1 : 0;
 			$new_file_name = $img_guid . '.' . $img_ext;
-		
+			
 			//move the file  
 			if ($s3->putObjectFile($_FILES['upload_image']['tmp_name'], $awsUserUploadBucket, $new_file_name, S3::ACL_PUBLIC_READ)) {
 				$img_url = $img_domain . $new_file_name;
-				$img_msg = 'Click to change<br /> your image';
+				$img_msg = 'Click to chose<br />a different image';
 			}
 			else {
 				// deal with error
@@ -115,7 +115,7 @@ if ($image_submitted || $submitted) {
 
 	$your_branch = isset($_POST['your_branch']) ? $_POST['your_branch'] : array();
 	if ($submitted) {
-		$your_branch_err = ($your_branch < 0) ? 'Please supply your branch' : '';
+		$your_branch_err = ($your_branch < 0) ? 'Please supply your bakery' : '';
 	}
 
 	$contact_number = isset($_POST['contact_number']) ? $_POST['contact_number'] : array();
@@ -133,7 +133,10 @@ if ($image_submitted || $submitted) {
 	
 	$img_guid = $img_guid ? $img_guid : (isset($_POST['img_guid']) ? $_POST['img_guid'] : array());
 	$img_ext = $img_ext ? $img_ext : (isset($_POST['img_ext']) ? $_POST['img_ext'] : array());
+	// value passed from form 1st
+	// value from  
 	$img_landscape = $img_landscape ? $img_landscape : (isset($_POST['img_landscape']) ? $_POST['img_landscape'] : array());
+	
 	$img_url = $img_guid == '' ? '' : $img_domain . $img_guid . '.' . $img_ext;
 
 	if ($submitted) {
@@ -184,7 +187,7 @@ VALUES (:first_name,:last_name,:dads_name,:your_email,:contact_number,:your_bran
 							':your_branch' => $your_branch,
 							':img_guid' => $img_guid,
 							':img_ext' => $img_ext,
-							':img_landscape' => $img_landscape == 1,
+							':img_landscape' => $img_landscape,
 							':ip_address' => $_SERVER['REMOTE_ADDR'],
 							':why_for' => $why_for,
 							':your_receipt' => $your_recipt
@@ -210,6 +213,7 @@ VALUES (:first_name,:last_name,:dads_name,:your_email,:contact_number,:your_bran
 		
 		if (!$form_err && !$db_err) {
 			header("Location: index.php?entry_success");
+			echo $img_landscape . ':' . $img_ext;
 			exit;
 		}
 	}
@@ -231,11 +235,13 @@ require_once('assets/head.php');
 		
 			<div class="stage">
 			
-			<h2>Pimp Up Your Dad</h2>
+			<a href="#" data-reveal-id="win-modal" class="what-can-i-win">What Can I Win?</a>
+			
+			<a href="/" class="btn-back">Back to voting</a>
+
+			<h2><a href="/">Pimp Up Your Dad</a></h2>
 			
 			<h3>Enter your dad for a chance to win</h3>
-			
-			<a href="#" data-reveal-id="win-modal" class="what-can-i-win">What can I win?</a>
 
 <?
 
@@ -259,7 +265,7 @@ elseif ($db_err) :
 	
 		<h4>We have a problem</h4>
 		
-		<p>We have been unable to save your Dad's entry.</p>
+		<p>We have been unable to save your dad's entry.</p>
 		
 		<? if (gettype($db_ex) == 'string') : ?>
 		<?= $db_ex ?><?
@@ -292,7 +298,7 @@ else :
 								<div class="five offset-by-one columns">
 									<div class="row form-elem">
 										<!--upload img-->
-										<div class="frame-holder<?= $img_landscape ? ' horz' : ' vert' ?><?= (strlen($img_err) > 0) ? ' error' : '' ?>" style="visibility:hidden;">
+										<div class="frame-holder<?= $img_landscape == 1 ? ' horz' : ' vert' ?><?= (strlen($img_err) > 0) ? ' error' : '' ?>" style="visibility:hidden;">
 											<input type="file" id="upload_image" name="upload_image" title="" class="frame frame-layer" />
 											<div class="frame text-layer"><?= strlen($img_err) > 0 ? $img_err : $img_msg ?></div>
 											<div class="frame-inner opacity-layer"></div>
@@ -312,13 +318,13 @@ else :
 						
 								<div class="six columns">
 									<div class="row form-elem">
-										<div class="six columns <?= $first_name_err ? 'error' : ''; ?>">
+										<div class="six columns mandatory <?= $first_name_err ? 'error' : ''; ?>">
 											<label class="cooper" for="first_name">Your first name</label>
 											<div class="controls">
 												<input type="text"id="first_name" name="first_name" maxlength="64" value="<?= strlen($first_name_err) > 0 ? '' : $first_name ?>" placeholder="<?= $first_name_err ?>" />
 											</div>
 										</div>
-										<div class="six columns <?= $last_name_err ? 'error' : ''; ?>">
+										<div class="six columns mandatory <?= $last_name_err ? 'error' : ''; ?>">
 											<div class="controls">
 											<label class="cooper" for="last_name">Your last name</label>
 												<input type="text" id="last_name" name="last_name" maxlength="64" value="<?= strlen($last_name_err) > 0 ? '' : $last_name ?>" placeholder="<?= $last_name_err ?>" />
@@ -326,35 +332,35 @@ else :
 										</div>
 									</div>
 									<div class="row form-elem">
-										<div class="six columns <?= $dads_name_err ? 'error' : ''; ?>">
-											<label class="cooper" for="dads_name">Your Dad's name</label>
+										<div class="six columns mandatory <?= $dads_name_err ? 'error' : ''; ?>">
+											<label class="cooper" for="dads_name">Your dad's name</label>
 											<div class="controls">
 												<input type="text" id="dads_name" name="dads_name" maxlength="64" value="<?= strlen($dads_name_err) > 0 ? '' : $dads_name ?>" placeholder="<?= $dads_name_err ?>" />
 											</div>
 										</div>
-										<div class="six columns <?= $contact_number_err ? 'error' : ''; ?>">
-											<label class="cooper" for="contact_number">Your contact Number</label>
+										<div class="six columns mandatory <?= $contact_number_err ? 'error' : ''; ?>">
+											<label class="cooper" for="contact_number">Your contact number</label>
 											<div class="controls">
 												<input type="text" id="contact_number" name="contact_number" maxlength="64" value="<?= strlen($contact_number_err) > 0 ? '' : $contact_number ?>" placeholder="<?= $contact_number_err ?>" />
 											</div>
 										</div>
 									</div>
 									<div class="row form-elem">
-										<div class="six columns <?= $contact_number_err ? 'error' : ''; ?>">
+										<div class="six columns mandatory <?= $contact_number_err ? 'error' : ''; ?>">
 											<label class="cooper" for="your_email">Your email address</label>
 											<div class="controls">
 												<input type="text" id="your_email" name="your_email" maxlength="128" value="<?= strlen($your_email_err) > 0 ? '' : $your_email ?>" class="input-large" placeholder="<?= $your_email_err ?>" />
 											</div>
 										</div>
 										<div class="six columns">
-											<label class="cooper" for="your_receipt">Your receipt number</label>
+											<label class="cooper" for="your_receipt">Your proof of purchase</label>
 											<div class="controls">
-												<input type="text" id="your_receipt" name="your_receipt" maxlength="32" value="<?= $your_receipt ?>" />
+												<input type="text" id="your_receipt" name="your_receipt" maxlength="32" value="<?= $your_receipt ?>" placeholder="Enter receipt number" />
 											</div>
 										</div>
 									</div>
 									<div class="row form-elem">
-										<div class="six columns <?= $your_state_err ? 'error' : ''; ?>">
+										<div class="six columns mandatory <?= $your_state_err ? 'error' : ''; ?>">
 											<label class="cooper" for="your_state">Your state</label>
 											<div class="controls">
 												<select id="your_state" name="your_state">
@@ -362,8 +368,8 @@ else :
 												</select>
 											</div>
 										</div>
-										<div class="six columns <?= $your_branch_err ? 'error' : ''; ?>">
-											<label class="cooper" for="your_branch">Your branch</label>
+										<div class="six columns mandatory <?= $your_branch_err ? 'error' : ''; ?>">
+											<label class="cooper" for="your_branch">Your bakery</label>
 											<div class="controls">
 												<select id="your_branch" name="your_branch">
 													<option>Please select</option>
@@ -373,7 +379,7 @@ else :
 									</div>
 									<div class="row form-elem">
 										<div class="twelve columns">
-											<label class="cooper" for="why_for">Why we should pimp up your Dad</label>
+											<label class="cooper" for="why_for">Why we should pimp up your dad</label>
 											<div class="controls">
 													<textarea id="why_for" name="why_for"><?= stripslashes($why_for) ?></textarea>
 											</div>
@@ -391,8 +397,10 @@ else :
 									</div>
 
 									<div class="row">
-										<div class="five offset-by-three columns enter">
-											<button id="submit_button" name="submit_button">Enter</button>
+										<div class="five offset-by-three columns enter text-center"><?
+										if ($img_guid != '') : ?>
+											<button id="submit_button" name="submit_button">Enter</button><?
+										endif; ?>
 										</div>
 									</div>
 									

@@ -1,6 +1,6 @@
 <?
 
-require_once('./assets/config.php');
+require_once('../assets/config.php');
 
 //
 $loggedin = false;
@@ -16,17 +16,33 @@ $submitted = isset($_POST['submit_button']);
 
 $leader_data = array();
 
+$your_state = null;
+$your_state_err = '';
+
+$your_branch = null;
+$your_branch_err = '';
+
 if ($submitted) {
 
-	if (SHA1($_POST['username'] . $_POST['password']) == $leaderboard_login_hash) {
-		setcookie("orfentic", true, time()+3600);
-		header('Location: leaderboard.php');
+	if (SHA1($_POST['username'] . $_POST['password']) == $franchise_login_hash) {
+		setcookie("orfenticsecret", true, time()+3600);
+		header('Location: /secret');
 	}
 
 }
 
-if (isset($_COOKIE['orfentic'])) {
+if (isset($_COOKIE['orfenticsecret'])) {
 	
+	$your_state = isset($_POST['your_state']) ? $_POST['your_state'] : array();
+	if ($submitted) {
+		$your_state_err = ($your_state < 0) ? 'Please supply your state' : '';
+	}
+
+	$your_branch = isset($_POST['your_branch']) ? $_POST['your_branch'] : array();
+	if ($submitted) {
+		$your_branch_err = ($your_branch < 0) ? 'Please supply your bakery' : '';
+	}
+
 	$loggedin = true;
 	
 	// retrieve the leaderboard
@@ -57,7 +73,8 @@ LEFT JOIN (
 	GROUP BY registered_id
 ) AS v ON v.registered_id = r.id
 WHERE !(is_approved IS NULL)
-" . ((strlen($search_term) == 0) ? "
+AND (your_branch = :branch)
+" . ((strlen($search_term) != 0) ? "
 AND (first_name like concat('%', '$search_term', '%') OR last_name like concat('%', '$search_term', '%') OR dads_name like concat('%', '$search_term', '%') OR your_email like concat('%', '$search_term', '%'))"
 : "") . "
 ORDER BY is_approved DESC, vote_count DESC, ratio ASC, battle_count DESC, created_at ASC
@@ -66,7 +83,7 @@ LIMIT 20;
 			$stmt = $conn->prepare($sql_str);
 			$stmt->setFetchMode(PDO::FETCH_BOTH);
 		
-			if (!$stmt->execute())
+			if (!$stmt->execute(array(':branch' => $your_branch)))
 			{
 				$db_err = true;
 				$db_ex = 'Select leaderboard statement failed';
@@ -86,7 +103,7 @@ LIMIT 20;
 	
 }
 
-require_once('./assets/head.php');
+require_once('../assets/head.php');
 
 
 ?>
@@ -137,12 +154,43 @@ else :
 	<?
 	
 	else :
-		if (count($leader_data) == 0) : ?>
-		<p>No votes!</p>
-<?
-		
-		else : ?>
+	
+?>
 
+		<div class="row form-elem">
+		<form method="post">
+		<input type="hidden" name="filter" value="" />
+			<div class="offset-by-one four columns <?= $your_state_err ? 'error' : ''; ?>">
+				<label class="cooper" for="your_state">Your state</label>
+				<div class="controls">
+					<select id="your_state" name="your_state">
+						<option>Please select</option>
+					</select>
+				</div>
+			</div>
+			<div class="five end columns <?= $your_branch_err ? 'error' : ''; ?>">
+				<label class="cooper" for="your_branch">Your bakery</label>
+				<div class="controls">
+					<select id="your_branch" name="your_branch">
+						<option>Please select</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		</div>
+<script>
+var your_state_val = '<?= $your_state ?>', your_branch_val = '<?= $your_branch ?>';
+$(function(){
+	$('#your_branch').on('change', function(){
+		$(this)[0].form.submit();
+	});
+});
+</script>
+<?
+		if (count($leader_data) == 0) : ?>
+		<p>No votes!</p><?		
+		endif; 
+?>
 <table class="table" style="width: 100%;">
 <thead>
 	<tr>
@@ -170,22 +218,21 @@ else :
 	?>
 </tbody>
 </table><?
-			endif;
 
 	endif; // loggedin
 
 endif; // db_err
 
-
 ?>
 </div>
 
-	</div>
+	</div>	
 </div>
 
 	</div>
 </div>
 
 <?
-require_once('./assets/foot.php');
+require_once('../assets/scripts.php');
+require_once('../assets/foot.php');
 ?>
