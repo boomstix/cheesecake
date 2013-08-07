@@ -16,11 +16,7 @@ $submitted = isset($_POST['submit_button']);
 
 $leader_data = array();
 
-$your_state = null;
-$your_state_err = '';
-
-$your_branch = null;
-$your_branch_err = '';
+$states = array('NIL','NSW','ACT','VIC','TASS','QLD','SA','NT','WA','NZ');
 
 if ($submitted) {
 
@@ -61,25 +57,10 @@ if (isset($_COOKIE['orfenticsecret'])) {
 			// grab the highest voted entries
 		
 			$sql_str = "
-SELECT r.`id`, `dads_name`, `your_email`, `created_at`, `contact_number`, `battle_count`, `is_approved`, `vote_count`, `img_guid`, `ratio`
-FROM `register` r
-LEFT JOIN (
-	SELECT registered_id, AVG(calc.ratio) AS ratio
-	FROM (
-		SELECT registered_id, sum(vote_count) AS ratio
-		FROM vote_log
-		GROUP BY registered_id, ip_address
-	) AS calc
-	GROUP BY registered_id
-) AS v ON v.registered_id = r.id
-WHERE !(is_approved IS NULL)
-AND (your_branch = :branch)
-" . ((strlen($search_term) != 0) ? "
-AND (first_name like concat('%', '$search_term', '%') OR last_name like concat('%', '$search_term', '%') OR dads_name like concat('%', '$search_term', '%') OR your_email like concat('%', '$search_term', '%'))"
-: "") . "
-ORDER BY is_approved DESC, vote_count DESC, ratio ASC, battle_count DESC, created_at ASC
-LIMIT 20;
-;";
+select ifnull(bc.count, 0) as entrants, ifnull(bc.votes, 0) as votes, b.store_name, b.state_id
+from (select count(id) as count, sum(vote_count) as votes, your_branch from register group by your_branch) as bc
+right join branch b on b.id = bc.your_branch
+order by bc.count desc, bc.votes desc, b.store_name;";
 			$stmt = $conn->prepare($sql_str);
 			$stmt->setFetchMode(PDO::FETCH_BOTH);
 		
@@ -155,38 +136,6 @@ else :
 	
 	else :
 	
-?>
-
-		<div class="row form-elem">
-		<form method="post">
-		<input type="hidden" name="filter" value="" />
-			<div class="offset-by-one four columns <?= $your_state_err ? 'error' : ''; ?>">
-				<label class="cooper" for="your_state">Your state</label>
-				<div class="controls">
-					<select id="your_state" name="your_state">
-						<option>Please select</option>
-					</select>
-				</div>
-			</div>
-			<div class="five end columns <?= $your_branch_err ? 'error' : ''; ?>">
-				<label class="cooper" for="your_branch">Your bakery</label>
-				<div class="controls">
-					<select id="your_branch" name="your_branch">
-						<option>Please select</option>
-					</select>
-				</div>
-			</div>
-		</form>
-		</div>
-<script>
-var your_state_val = '<?= $your_state ?>', your_branch_val = '<?= $your_branch ?>';
-$(function(){
-	$('#your_branch').on('change', function(){
-		$(this)[0].form.submit();
-	});
-});
-</script>
-<?
 		if (count($leader_data) == 0) : ?>
 		<p>No votes!</p><?		
 		endif; 
@@ -194,25 +143,19 @@ $(function(){
 <table class="table" style="width: 100%;">
 <thead>
 	<tr>
-		<th>Entry</th>
-		<th>Created</th>
-		<th>Contact No</th>
-		<th>Email</th>
-		<th>Battles</th>
-		<th>Score</th>
-		<th>Confidence</th>
+		<th>Bakery</th>
+		<th>State</th>
+		<th>Entries</th>
+		<th>Votes</th>
 	</tr>
 </thead>
 <tbody><?
 	foreach ($leader_data as $ix => $data) : ?>
-	<tr<?= $data['is_approved'] == '1' ? '' : ' class="rejected" title="Entry has been rejected"' ; ?>>
-		<td><?= $data['dads_name'] ?></td>
-		<td><?= $data['created_at'] ?></td>
-		<td><?= $data['contact_number'] ?></td>
-		<td><?= $data['your_email'] ?></td>
-		<td class="text-center"><?= $data['battle_count'] ?></td>
-		<td class="text-center"><strong><?= $data['vote_count'] ?></strong></td>
-		<td class="text-center"><?= $data['ratio'] == 0 ? 0 : round(1 / $data['ratio'] * 100, 2) ?>%</td>
+	<tr>
+		<td><?= $data['store_name'] ?></td>
+		<td><?= $states[$data['state_id']] ?></td>
+		<td class="text-center"><?= $data['entrants'] ?></td>
+		<td class="text-center"><strong><?= $data['votes'] ?></strong></td>
 	</tr><?
 	endforeach;
 	?>

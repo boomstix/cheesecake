@@ -173,7 +173,7 @@ catch (PDOException $e) {
 require_once('./assets/head.php');
 
 ?>
-<body class="vote">
+<body class="<?= isset($_GET['mobile']) ? 'vote' : 'home' ?>">
 
 <div id="wrap">
 <div id="main">
@@ -185,9 +185,11 @@ require_once('./assets/head.php');
 <div class="container">
 	<div class="stage">
 		
-		<a href="#" data-reveal-id="win-modal" class="what-can-i-win">What can I win?</a>
+		<a href="#" data-reveal-id="win-modal" class="what-can-i-win top">What can I win?</a>
 
-		<a href="form.php" class="enter-your-dad">Enter your Dad</a>
+		<a href="form.php" class="enter-your-dad top">Enter your dad</a>
+
+		<a href="?mobile" class="vote-for-a-dad top">Vote for a dad</a>
 
 		<h2><a href="/">Pimp Up Your Dad</a></h2>
 		
@@ -226,7 +228,7 @@ if ($competition_running) :
 								<div class="vote-count cooper"><span class="count"><?= $dad1_datarow['vote_count'] ?></span> vote<?= ($dad1_datarow['vote_count'] == 1 ? '' : 's') ?></div>
 							</div>
 							<div class="row">
-								<div class="column ribbon">				
+								<div class="column ribbon">
 									<div class="dads-name cooper"><?= $dad1_datarow['dads_name'] ?></div>
 								</div>
 							</div>
@@ -269,20 +271,31 @@ if ($competition_running) :
 
 				</div>
 			</div>
-			
-			<div class="row">
-				<div class="twelve column text-center">
-					<div class="cta">
-				
-					<p>This Father's Day The Cheesecake Shop is giving one special dad the chance to <strong>win the ultimate makeover worth <?= $prize_total ?></strong>.
-					<br/>
-					So, if you think your dad needs pimping up, <a href="form.php">click here to enter him</a> or choose one of the dads above to start voting.</p>
-					
-					</div>
-				</div>
-			</div>
 
 		</form>
+			
+		<a href="form.php" class="enter-your-dad bottom">Enter your dad</a>
+
+		<a href="#" data-reveal-id="win-modal" class="what-can-i-win bottom">What can I win?</a>
+
+		<a href="?mobile" class="vote-for-a-dad bottom">Vote for a dad</a>
+
+		<div class="row">
+			<div class="twelve column text-center">
+				<div class="cta">
+			
+				<p>
+					This Father's Day The Cheesecake Shop is giving one special dad the chance to <strong>win the ultimate makeover worth <?= $prize_total ?></strong>.
+					<span>
+						<br/>
+						So, if you think your dad needs pimping up, <a href="form.php">click here to enter him</a> or choose one of the dads above to start voting.
+					</span>
+				</p>
+				
+				</div>
+			</div>
+		</div>
+
 		<? endif; ?>
 		
 	</div>

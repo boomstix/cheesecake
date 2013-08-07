@@ -235,9 +235,9 @@ require_once('assets/head.php');
 		
 			<div class="stage">
 			
-			<a href="#" data-reveal-id="win-modal" class="what-can-i-win">What Can I Win?</a>
+			<a href="#" data-reveal-id="win-modal" class="what-can-i-win top">What Can I Win?</a>
 			
-			<a href="/" class="btn-back">Back to voting</a>
+			<a href="/" class="btn-back top">Back to voting</a>
 
 			<h2><a href="/">Pimp Up Your Dad</a></h2>
 			

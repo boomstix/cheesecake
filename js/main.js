@@ -164,7 +164,7 @@ $(function () {
 	$('#upload_button').on('click', function(e) {
 		if ($('#upload_image').val() != '') { // c:
 			setTimeout(disableButtons, 50)	// a:
-			$('.text-layer').html('Uploading ...');
+			$('.text-layer').html('Uploading');
 		}
 		else {	// b:
 			e.preventDefault();
@@ -205,7 +205,7 @@ $(function () {
 			reveal();
 		}
 		
-		function prev() {
+		function prev() {	
 			//console.log('prev');
 			currentIx = (currentIx == 0) ? maxIx : currentIx - 1;
 			showCurrent();
