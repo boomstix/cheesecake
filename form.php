@@ -2,6 +2,8 @@
 
 require_once('./assets/config.php');
 require_once('./assets/S3.php');
+require_once('./assets/class.upload.php');
+
 
 // initialise our validation vars
 
@@ -61,31 +63,49 @@ if ($image_submitted || $submitted) {
 	// if there is a failure, we need to reset the guid to null
 
 	if ($_FILES['upload_image']['name']) {
-	
-		if ($_FILES['upload_image']['size'] > (1024 * $max_file_size_kb)) {
-				$img_err = 'Please keep file size under '  . $max_file_size_kb . 'KB.';
-		}
-		else {
+
+		// calculate aspect ratio
+		list($width, $height, $type, $attr) = getimagesize($_FILES['upload_image']['tmp_name']);
 		
-			// calculate aspect ratio
-			list($width, $height, $type, $attr) = getimagesize($_FILES['upload_image']['tmp_name']);
-			
-			$img_guid = generateGuid();
-			$img_ext = pathinfo($_FILES['upload_image']['name'], PATHINFO_EXTENSION);
-			$img_landscape = (($width / $height) >= 1) ? 1 : 0;
-			$new_file_name = $img_guid . '.' . $img_ext;
-			
-			//move the file  
-			if ($s3->putObjectFile($_FILES['upload_image']['tmp_name'], $awsUserUploadBucket, $new_file_name, S3::ACL_PUBLIC_READ)) {
-				$img_url = $img_domain . $new_file_name;
-				$img_msg = 'Click to chose<br />a different image';
+		$img_guid = generateGuid();
+		$img_ext = pathinfo($_FILES['upload_image']['name'], PATHINFO_EXTENSION);
+		$new_file_name = $img_guid . '.' . $img_ext;
+		// read exif data to see if the camera rotated the image 
+		$exif = exif_read_data($_FILES['upload_image']['tmp_name']);
+		
+		$handle = new upload($_FILES['upload_image']);
+		if ($handle->uploaded) {
+			$handle->file_new_name_body_add = '_resized';
+			$handle->image_resize = true;
+			$handle->image_ratio = true;
+			$handle->image_x = 300;
+			$handle->image_y = 300;
+			if ($exif['Orientation'] == 6) {
+				$handle->image_rotate = '90';
 			}
-			else {
-				// deal with error
-				$img_err = 'There is a problem<br>saving your image.';
+			$handle->process('./upload/');
+			if ($handle->processed) {
+
+				$img_landscape = (($handle->image_dst_x  / $handle->image_dst_y) >= 1) ? 1 : 0;
+		
+				//move the file  
+				// if ($s3->putObjectFile($_FILES['upload_image']['tmp_name'], $awsUserUploadBucket, $new_file_name, S3::ACL_PUBLIC_READ)) {
+				if ($s3->putObjectFile('./upload/' . $handle->file_dst_name, $awsUserUploadBucket, $new_file_name, S3::ACL_PUBLIC_READ)) {
+					$img_url = $img_domain . $new_file_name;
+					$img_msg = 'Click to chose<br />a different image';
+				}
+				else {
+					// deal with error
+					$img_err = 'There is a problem<br>saving your image.';
+				}
+				// clean up
+				$handle->clean();
+				unlink('./upload/' . $handle->file_dst_name);
+			} else {
+				$img_err = $handle->error;
 			}
 		}
-	
+		
 	}
 
 	$first_name = isset($_POST['first_name']) ? $_POST['first_name'] : array();
@@ -408,6 +428,12 @@ else :
 							</div><!-- .row-fluid -->
 							
 						</form>
+
+		<a href="/?mobile" class="vote-for-a-dad bottom">Vote for a dad</a>
+
+		<a href="#" data-reveal-id="win-modal" class="what-can-i-win bottom">What can I win?</a>
+
+
 <?
 endif; // $submitted
 
@@ -423,7 +449,7 @@ else: // $competition_running
 <?
 
 endif; // $competition_running
-require_once('./assets/overlays.php');
+
 ?>
 			</div><!-- .stage -->
 <?
@@ -433,6 +459,7 @@ require_once('./assets/overlays.php');
 </div><!-- #main -->
 </div><!-- #wrap -->
 <?
+require_once('./assets/overlays.php');
 require_once('./assets/scripts.php');
 ?>
 <script>

@@ -189,7 +189,7 @@ require_once('./assets/head.php');
 
 		<a href="form.php" class="enter-your-dad top">Enter your dad</a>
 
-		<a href="?mobile" class="vote-for-a-dad top">Vote for a dad</a>
+		<a href="/?mobile" class="vote-for-a-dad top">Vote for a dad</a>
 
 		<h2><a href="/">Pimp Up Your Dad</a></h2>
 		
@@ -278,7 +278,7 @@ if ($competition_running) :
 
 		<a href="#" data-reveal-id="win-modal" class="what-can-i-win bottom">What can I win?</a>
 
-		<a href="?mobile" class="vote-for-a-dad bottom">Vote for a dad</a>
+		<a href="/?mobile" class="vote-for-a-dad bottom">Vote for a dad</a>
 
 		<div class="row">
 			<div class="twelve column text-center">
@@ -314,13 +314,13 @@ else: // $competition_running
 
 endif; // $competition_running
 
-require_once('./assets/overlays.php');
 ?>
 	</div><!-- .stage -->
 </div><!-- .container -->
 </div><!-- #main -->
 </div><!-- #wrap -->
 <?
+require_once('./assets/overlays.php');
 require_once('./assets/scripts.php');
 ?>
 <script>

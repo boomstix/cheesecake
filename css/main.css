@@ -221,7 +221,7 @@ a:hover, a:visited, a:active, a:focus {
 	display: none;
 }
 
-.btn-back {
+.btn-back.top {
 	display: block;
 	position: absolute;
 	top: 10px;
@@ -232,8 +232,11 @@ a:hover, a:visited, a:active, a:focus {
 	height: 71px;
 	text-indent: -9999px;
 }
-.btn-back:hover {
+.btn-back.top:hover {
 	background-position: 0 -71px;
+}
+.btn-back.bottom {
+	display: none;
 }
 
 .form {
@@ -871,6 +874,7 @@ h4.cooper {
 	background-position: bottom center;
 	background-repeat: repeat-x;
 	padding: 0 20px;
+	z-index: 55;
 }
 
 .reveal-modal p {
@@ -1069,8 +1073,8 @@ h4.cooper {
 	}
 
 	h2 {
-		width: 321px;
-		height: 127px;
+		width: 273px;
+		height: 109px;
 		background-image: url(../img/mob/pimp-up-logo-home.png);
 	}
 	
@@ -1081,7 +1085,7 @@ h4.cooper {
 	.enter h3,
 	.vote h3 {
 		width: 320px;
-		height: 51px;
+		height: 53px;
 	}
 	
 	.home h3 {
@@ -1101,18 +1105,18 @@ h4.cooper {
 	.what-can-i-win.top,
 	.what-can-i-win.bottom {
 		z-index: 50;
-		top: 200px;
+		top: 190px;
 		left: 50%;
-		width: 279px;
-		height: 61px;
-		margin: 0 auto 0 -140px;
+		width: 241px;
+		height: 54px;
+		margin: 0 auto 0 -120px;
 		text-indent: -9999px;
 		background-position: 0 0;
 		background-image: url(../img/mob/btn-what-can-i-win.png);
 	}
 	.what-can-i-win.top:hover,
 	.what-can-i-win.bottom:hover {
-		background-position: 0 -62px;
+		background-position: 0 -54px;
 	}
 	.home .what-can-i-win.top {
 		display: block;
@@ -1120,9 +1124,11 @@ h4.cooper {
 	.home .what-can-i-win.bottom {
 		display: none;
 	}
+	.enter .what-can-i-win.top,
 	.vote .what-can-i-win.top {
 		display: none;
 	}
+	.enter .what-can-i-win.bottom,
 	.vote .what-can-i-win.bottom {
 		display: block;
 		left: 0;
@@ -1136,16 +1142,16 @@ h4.cooper {
 		top: 130px;
 		left: 50%;
 		right: inherit;
-		width: 279px;
-		height: 61px;
-		margin: 0 auto 0 -140px;
+		width: 241px;
+		height: 53px;
+		margin: 0 auto 0 -120px;
 		text-indent: -9999px;
 		background-position: 0 0;
 		background-image: url(../img/mob/btn-enter-your-dad.png);
 	}
 	.enter-your-dad.top:hover,
 	.enter-your-dad.bottom:hover {
-		background-position: 0 -62px;
+		background-position: 0 -53px;
 	}
 	.home .enter-your-dad.top {
 		display: block;
@@ -1153,9 +1159,11 @@ h4.cooper {
 	.home .enter-your-dad.bottom {
 		display: none;
 	}
+	.enter .enter-your-dad.top,
 	.vote .enter-your-dad.top {
 		display: none;
 	}
+	.enter .enter-your-dad.bottom,
 	.vote .enter-your-dad.bottom {
 		display: block;
 		left: 0;
@@ -1163,23 +1171,24 @@ h4.cooper {
 		text-indent: -9999px
 	}
 	
-	.home .vote-for-a-dad.top {
+	.vote-for-a-dad.top,
+	.vote-for-a-dad.bottom {
 		z-index: 50;
 		display: block;
-		position: absolute;
 		background-repeat: no-repeat;
 		text-indent: -9999px;
-		top: 270px;
+		top: 250px;
 		left: 50%;
 		right: inherit;
-		width: 279px;
-		height: 61px;
-		margin: 0 auto 0 -140px;
+		width: 241px;
+		height: 54px;
+		margin: 0 auto 0 -120px;
 		background-position: 0 0;
-		background-image: url(../img/mob/btn-enter-your-dad.png);
+		background-image: url(../img/mob/btn-vote-for-a-dad.png);
 	}
-	.home .vote-for-a-dad.top:hover {
-		background-position: 0 -62px;
+	.vote-for-a-dad.top:hover,
+	.vote-for-a-dad.bottom:hover {
+		background-position: 0 -54px;
 	}
 	.home .vote-for-a-dad.top {
 		display: block;
@@ -1191,10 +1200,17 @@ h4.cooper {
 		display: none;	
 	}
 	.vote .vote-for-a-dad.bottom {
-		display: none;	
+		display: none;
+	}
+	.enter .vote-for-a-dad.bottom {
+		display: block;
+		left: 0;
+		margin: 10px auto;
+		text-indent: -9999px
 	}
 	
-	.btn-back {
+	.btn-back.top,
+	.btn-back.bottom {
 		top: 130px;
 		left: 50%;
 		right: inherit;
@@ -1204,9 +1220,18 @@ h4.cooper {
 		background-position: 0 0;
 		background-image: url(../img/mob/btn-back.png);
 	}
-	
-	.btn-back:hover {
+	.btn-back.top:hover,
+	.btn-back.bottom:hover {
 		background-position: 0 -62px;
+	}
+	.enter .btn-back.top {
+		display: none;
+	}
+	.enter .btn-back.bottom {
+		display: block;
+		left: 0;
+		margin: 5px auto 15px;
+		text-indent: -9999px
 	}
 
 	.form {
@@ -1226,7 +1251,7 @@ h4.cooper {
 	}
 	
 	.image {
-		height: 240px;
+		height: 180px;
 	}
 	
 	.home .cta {
@@ -1282,14 +1307,14 @@ h4.cooper {
 	
 	.vs span {
 		margin: 30px auto 20px;
-		width: 64px;
-		height: 35px;
+		width: 39px;
+		height: 22px;
 		background-image: url(../img/mob/versus.png);
 	}
 
 	#win-modal {
 		width: 320px;
-		margin-left: -50%;
+		margin-left: -160px;
 	}
 	
 	#win-modal .prize {
@@ -1307,8 +1332,8 @@ h4.cooper {
 	}
 
 	.vote-count {
-		width: 120px;
-		height: 35px;
+		width: 114px;
+		height: 33px;
 		background-image: url(../img/mob/score-bg.png);
 		margin-top: -26px;
 		font-size: 9px;
@@ -1345,29 +1370,29 @@ h4.cooper {
 
 	div.frame-holder.horz,
 	.horz .frame {
-		width: 220px;
-		height: 168px;
+		width: 206px;
+		height: 157px;
 	}
 
 	div.frame-holder.vert,
 	.vert .frame {
-		height: 220px;
-		width: 168px;
+		height: 157px;
+		width: 120px;
 	}
 
 	.horz div.img-layer-outer,
 	.horz div.img-layer-inner,
 	.horz .frame-inner
 	{
-		width: 200px;
-		height: 148px;
+		width: 191px;
+		height: 142px;
 	}
 
 	.vert div.img-layer-outer,
 	.vert div.img-layer-inner,
 	.vert .frame-inner {
-		height: 200px;
-		width: 148px;
+		height: 142px;
+		width: 105px;
 	}
 
 	.horz .frame-layer {
@@ -1379,28 +1404,28 @@ h4.cooper {
 	}
 
 	.horz div.text-layer {
-		padding: 40px 30px 10px;
+		padding: 20px 10px 10px;
 	}
 	.vert div.text-layer {
-		padding: 70px 30px 10px;
+		padding: 30px 20px 10px;
 	}
 
 	div.pimp-layer {
-		background-image: url(../img/pimp-up.png);
-		width: 140px;
-		height: 90px;
+		background-image: url(../img/mob/pimp-up.png);
+		width: 85px;
+		height: 54px;
 	}
 
 	.horz div.img-layer-inner input[type="image"],
 	.horz div.img-layer-inner img {
-		max-width: 200px;
-		max-height: 148px;
+		max-width: 191px;
+		max-height: 142px;
 	}
 
 	.vert div.img-layer-inner input[type="image"],
 	.vert div.img-layer-inner img {
-		max-height: 200px;
-		max-width: 148px;
+		max-height: 142px;
+		max-width: 105px;
 	}
 
 
