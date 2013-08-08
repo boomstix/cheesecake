@@ -9,9 +9,11 @@
 <footer>
 	<div class="stage">
 <a href="http://<?= $footer_url ?>" class="badge">The Cheesecake Shop</a>
+<div class="links">
 <a href="#terms-modal" data-reveal-id="terms-modal" class="terms">Terms and Conditions</a>
 <span class="sep">|</span>
 <a href="http://<?= $footer_url ?>" class="url"><?= $footer_url ?></a>
+</div>
 <a href="http://<?= $footer_url ?>" class="logo">The Cheesecake Shop</a>
 	</div>
 </footer>

@@ -34,6 +34,7 @@ $your_receipt = null;
 $agree_terms = null;
 $agree_terms_err = '';
 
+$img_url = '';
 $img_guid = null;
 $img_ext = null;
 $img_landscape = null;

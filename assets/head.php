@@ -7,7 +7,7 @@
 
 	<title>The Cheesecake Shop - Pimp My Dad</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width" />
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<link rel="icon" href="http://www.cheesecake.com.au/media/favicon/default/favicon_1.ico" type="image/x-icon">
@@ -20,7 +20,7 @@
 	<meta property="og:image" content="http://<?= $analytics_url ?>/img/fb-share.png"/>
 
 
-	<link rel="stylesheet" href="/css/foundation.min.css" />
+	<link rel="stylesheet" href="/css/foundation.css" />
 	<link rel="stylesheet" href="/css/main.css" />
 
 	<script src="/js/modernizr.foundation.js"></script>

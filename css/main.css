@@ -48,6 +48,8 @@ footer a.badge {
 	text-indent: -9999px;
 }
 
+	
+
 footer a.terms {
 	margin-top: 20px;
 	margin-left: 10px;
@@ -130,7 +132,11 @@ h2:hover {
 	-o-transition: background-position 0.1s ease;
 }
 
-h2 a { display: block; width: 100%; height: 100%;}
+h2 a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
 
 .enter h3 {
 	margin: 0 auto;
@@ -241,6 +247,7 @@ a:hover, a:visited, a:active, a:focus {
 
 .form {
 	padding-top: 0px;
+	margin: 0;
 }
 
 .vert-outer {
@@ -535,7 +542,7 @@ span.customSelect {
 	border-color: #443630 #443630 #332823 #443630;
 	margin-bottom: 12px;
 	background-image: url(../img/select-arrow.png);
-	background-position: right 5px;
+	background-position: 97% 5px;
 	background-repeat: no-repeat;
 	padding-right: 5px;
 	font-style: italic;
@@ -1028,15 +1035,9 @@ h4.cooper {
 
 	.columns, .column {
 		padding: 0 15px;
+		clear: left;
 	}
 
-	.vs {
-		height: inherit;
-	}
-	.vs span {
-		margin: 5px auto;
-	}
-	
 	#main {
 		overflow:initial;
 		padding-bottom: 54px;
@@ -1078,6 +1079,7 @@ h4.cooper {
 		background-image: url(../img/mob/pimp-up-logo-home.png);
 	}
 	
+	.enter h2,
 	.vote h2 {
 		display: none;
 	}
@@ -1243,15 +1245,22 @@ h4.cooper {
 	}
 	
 	.ribbon {
-		color: #fee05e;
+		display: none;
 	}
 	
-	.dads-name {
-		background-image: none;
+	.vs {
+		height: inherit;
 	}
+	.vs span {
+		margin: 0 auto;
+		width: 39px;
+		height: 22px;
+		background-image: url(../img/mob/versus.png);
+	}
+
 	
 	.image {
-		height: 180px;
+		height: 175px;
 	}
 	
 	.home .cta {
@@ -1283,35 +1292,30 @@ h4.cooper {
 		top: 0px;
 	}
 	
+	footer .links {
+		position: relative;
+		top: 70px;
+		margin: 0 auto;
+		width: 100%;
+		text-align: center;
+	}
+	
 	footer a.terms {
-		position: absolute;
-		top: 60px;
-		left: 10px;
+		margin: 0 2px;
 	}
 	
 	footer span.sep {
-		position: absolute;
-		top: 60px;
-		left: 145px;
+		margin: 0 2px;
 	}
 	
 	footer a.url {
-		position: absolute;
-		top: 60px;
-		left: 160px;
+		margin: 0 2px;
 	}
 	
 	div.enter {
 		padding-bottom: 70px;
 	} 
 	
-	.vs span {
-		margin: 30px auto 20px;
-		width: 39px;
-		height: 22px;
-		background-image: url(../img/mob/versus.png);
-	}
-
 	#win-modal {
 		width: 320px;
 		margin-left: -160px;
@@ -1335,7 +1339,7 @@ h4.cooper {
 		width: 114px;
 		height: 33px;
 		background-image: url(../img/mob/score-bg.png);
-		margin-top: -26px;
+		margin-top: -20px;
 		font-size: 9px;
 	}
 
