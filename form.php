@@ -81,7 +81,7 @@ if ($image_submitted || $submitted) {
 			$handle->image_ratio = true;
 			$handle->image_x = 300;
 			$handle->image_y = 300;
-			if ($exif['Orientation'] == 6) {
+			if (isset($exif['Orientation']) && $exif['Orientation'] == 6) {
 				$handle->image_rotate = '90';
 			}
 			$handle->process('./upload/');
@@ -93,7 +93,7 @@ if ($image_submitted || $submitted) {
 				// if ($s3->putObjectFile($_FILES['upload_image']['tmp_name'], $awsUserUploadBucket, $new_file_name, S3::ACL_PUBLIC_READ)) {
 				if ($s3->putObjectFile('./upload/' . $handle->file_dst_name, $awsUserUploadBucket, $new_file_name, S3::ACL_PUBLIC_READ)) {
 					$img_url = $img_domain . $new_file_name;
-					$img_msg = 'Click to chose<br />a different image';
+					$img_msg = 'Click to choose<br />a different image';
 				}
 				else {
 					// deal with error
@@ -156,7 +156,7 @@ if ($image_submitted || $submitted) {
 	$img_ext = $img_ext ? $img_ext : (isset($_POST['img_ext']) ? $_POST['img_ext'] : array());
 	// value passed from form 1st
 	// value from  
-	$img_landscape = $img_landscape ? $img_landscape : (isset($_POST['img_landscape']) ? $_POST['img_landscape'] : array());
+	$img_landscape = !is_null($img_landscape) ? $img_landscape : (isset($_POST['img_landscape']) ? $_POST['img_landscape'] : array());
 	
 	$img_url = $img_guid == '' ? '' : $img_domain . $img_guid . '.' . $img_ext;
 
@@ -243,7 +243,7 @@ VALUES (:first_name,:last_name,:dads_name,:your_email,:contact_number,:your_bran
 require_once('assets/head.php');
 
 ?>
-<body class="enter">
+<body class="enter <?= $region ?>">
 
 <div id="wrap">
 <div id="main">
@@ -319,7 +319,7 @@ else :
 								<div class="five offset-by-one columns">
 									<div class="row form-elem">
 										<!--upload img-->
-										<div class="frame-holder<?= $img_landscape == 1 ? ' horz' : ' vert' ?><?= (strlen($img_err) > 0) ? ' error' : '' ?>" style="visibility:hidden;">
+										<div class="frame-holder<?= (is_null($img_landscape) || $img_landscape == 1) ? ' horz' : ' vert' ?><?= (strlen($img_err) > 0) ? ' error' : '' ?>" style="visibility:hidden;">
 											<input type="file" id="upload_image" name="upload_image" title="" class="frame frame-layer" />
 											<div class="frame text-layer"><?= strlen($img_err) > 0 ? $img_err : $img_msg ?></div>
 											<div class="frame-inner opacity-layer"></div>

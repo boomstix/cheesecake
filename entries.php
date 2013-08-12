@@ -12,12 +12,14 @@ $is_rejected_only = isset($_GET['rejected']);
 
 // whether the form was submitted
 $submitted = isset($_POST['submit_button']);
-$search_term = $_POST['search_term'];
+$search_term = isset($_POST['search_term']) ? $_POST['search_term'] : null;
 
 // whether the form was submitted
 $submitted = isset($_POST['submit_button']);
 
 $entry_data = array();
+$db_err = false;
+$db_ex = null;
 
 if ($submitted) {
 
@@ -168,6 +170,7 @@ else :
 <p>Items - here - none.</p> <?
 
 	else : ?>
+<h4>Total: <?= count($entry_data) ?> <?= ($is_approved_only) ? 'approved' : ($is_rejected_only ? 'rejected' : 'waiting for moderation') ?></h4>
 <form method="post">
 <input type="hidden" name="submit_button" value="" />
 <table class="table">
@@ -177,14 +180,17 @@ else :
 				if ($ix % $itemsPerRow == 0) : ?> 
 	<tr><?
 				endif; ?> 
-		<td>
-			<img src="<?= 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/' . $data['img_guid'] .'.'. (is_null($data['img_ext']) ? 'jpg' : $data['img_ext'] ) ?>" style="max-width: 120px; max-height: 120px; min-width: 120px; min-height: 120px;" />
+		<td class="text-center">
+			<div style="height: 120px; vertical-align: middle; display: table-cell;">
+			<img src="<?= 'http://' . $awsUserUploadBucket . '.s3.amazonaws.com/' . $data['img_guid'] .'.'. (is_null($data['img_ext']) ? 'jpg' : $data['img_ext'] ) ?>" style="max-width: 120px; max-height: 120px;" />
+			</div>
 			<div><?= $data['dads_name'] ?></div>
 			<? if (!$is_approved_only) : ?><button type="submit" name="approve" value="<?= $data['id'] ?>">Approve</button><? endif; ?>
 			<? if (!$is_rejected_only) : ?><button type="submit" name="reject" value="<?= $data['id'] ?>">Reject</button><? endif; ?>
 		</td> <?
 				if (($ix % $itemsPerRow == $itemsPerRow - 1) || ($ix % $itemsPerRow == count($entry_data) -1)) : ?> 
-	</tr><?
+	</tr>
+	<?
 				endif;
 			endforeach;
 	?> 

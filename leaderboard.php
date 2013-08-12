@@ -9,12 +9,15 @@ $search_term = false;
 
 // whether the form was submitted
 $submitted = isset($_POST['submit_button']);
-$search_term = $_POST['search_term'];
+$search_term = isset($_POST['search_term']) ? $_POST['search_term'] : null;
 
 // whether the form was submitted
 $submitted = isset($_POST['submit_button']);
 
 $leader_data = array();
+
+$db_err = false;
+$db_ex = null;
 
 if ($submitted) {
 
@@ -45,7 +48,7 @@ if (isset($_COOKIE['orfentic'])) {
 			// grab the highest voted entries
 		
 			$sql_str = "
-SELECT r.`id`, `dads_name`, `your_email`, `created_at`, `contact_number`, `battle_count`, `is_approved`, `vote_count`, `img_guid`, `ratio`
+SELECT r.`id`, `dads_name`, `your_email`, `created_at`, `contact_number`, `battle_count`, `is_approved`, `vote_count`, `img_guid`, `ratio`, `why_for`
 FROM `register` r
 LEFT JOIN (
 	SELECT registered_id, AVG(calc.ratio) AS ratio
@@ -153,18 +156,20 @@ else :
 		<th>Battles</th>
 		<th>Score</th>
 		<th>Confidence</th>
+		<th>Why</th>
 	</tr>
 </thead>
 <tbody><?
 	foreach ($leader_data as $ix => $data) : ?>
 	<tr<?= $data['is_approved'] == '1' ? '' : ' class="rejected" title="Entry has been rejected"' ; ?>>
 		<td><?= $data['dads_name'] ?></td>
-		<td><?= $data['created_at'] ?></td>
+		<td style="white-space: nowrap;"><?= $data['created_at'] ?></td>
 		<td><?= $data['contact_number'] ?></td>
 		<td><a href="entrant.php?id=<?= $data['id'] ?>"><?= $data['your_email'] ?></a></td>
 		<td class="text-center"><?= $data['battle_count'] ?></td>
 		<td class="text-center"><strong><?= $data['vote_count'] ?></strong></td>
 		<td class="text-center"><?= $data['ratio'] == 0 ? 0 : round(1 / $data['ratio'] * 100, 2) ?>%</td>
+		<td class="overflow" title="<?= stripslashes($data['why_for']) ?>"><?= stripslashes($data['why_for']) ?></td>
 	</tr><?
 	endforeach;
 	?>
@@ -185,7 +190,19 @@ endif; // db_err
 
 	</div>
 </div>
-
+<style>
+.content {
+	width: 960px;
+}
+.overflow {
+	cursor: help;
+	display: block;
+	width: 150px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+</style>
 <?
 require_once('./assets/foot.php');
 ?>

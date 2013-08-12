@@ -1,6 +1,6 @@
 <div class="prize" id="prize1">
 	<div class="prize-image"><img src="img/prizes/personal-training.png" width="261" height="240" alt="personal training" /></div>
-	<div class="prize-type cooper">Fitness First (12 sessions) voucher</div>
+	<div class="prize-type cooper">Fitness First voucher (12 sessions)</div>
 	<div class="prize-value cooper">Value: $1200</div>
 </div>
 
@@ -18,7 +18,7 @@
 
 <div class="prize" id="prize4">
 	<div class="prize-image"><img src="img/prizes/new-bling.png" width="261" height="240" alt="new bling" /></div>
-	<div class="prize-type cooper">BBQ Galore</div>
+	<div class="prize-type cooper">Barbeques Galore voucher</div>
 	<div class="prize-value cooper">Value: $1500</div>
 </div>
 

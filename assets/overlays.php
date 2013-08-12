@@ -31,11 +31,13 @@ require_once('./assets/prizes_' .$region. '.php');
 					<p>Once your dad's photo is approved (takes about 12 hours for us to review and approve entries), he'll be entered into the competition and then it's over to the people to vote for who's dad needs pimping up more. </p>
 					<p>Remember to spread the word and get people voting for your dad, oh and don't forget to treat him to one of our cakes this Father's Day.</p>
 					<div class="row">
-						<div class="five columns text-right">
-							<a href="#" class="btn-facebook-share right"><span>Share</span></a>
-						</div>
-						<div class="seven columns">
-							<a data-dismiss="modal" aria-hidden="true" class="close-reveal-modal btn-close">Keep Voting</a>
+						<div class="twelve columns text-center">
+							<div class="overlay-buttons">
+								
+								<a href="#" class="btn-facebook-share"><span>Share</span></a>
+								<a data-dismiss="modal" aria-hidden="true" class="close-reveal-modal btn-close">Keep Voting</a>
+								
+							</div>
 						</div>
 					</div>
 				</div>

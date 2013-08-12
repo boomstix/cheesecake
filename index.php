@@ -173,7 +173,7 @@ catch (PDOException $e) {
 require_once('./assets/head.php');
 
 ?>
-<body class="<?= isset($_GET['mobile']) ? 'vote' : 'home' ?>">
+<body class="<?= isset($_GET['mobile']) ? 'vote' : 'home' ?> <?= $region ?>">
 
 <div id="wrap">
 <div id="main">
@@ -204,7 +204,7 @@ if ($competition_running) :
 		<?= $db_ex->getMessage() ?>
 		<? elseif ($dad1_datarow && $dad2_datarow) : ?>
 			
-		<form class="form" method="post" action="?">
+		<form class="form" method="post" action="<?= isset($_GET['mobile']) ? '?mobile' : ''?>">
 			<input type="hidden" name="submit" value="1" />
 			<input type="hidden" name="dad1" value="<?= $dad1_datarow['id'] ?>" />
 			<input type="hidden" name="dad2" value="<?= $dad2_datarow['id'] ?>" />

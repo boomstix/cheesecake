@@ -394,6 +394,7 @@ div.enter a {
 	height: 70px;
 	text-indent: -9999px;
 	margin-left: 22px;
+	cursor: pointer;
 }
 
 #upload_button:hover {
@@ -891,15 +892,23 @@ h4.cooper {
 .reveal-modal .close-button {
 }
 
+.reveal-modal .overlay-buttons {
+	position: relative;
+	width: 300px;
+	margin: 0 auto;
+}
+
 .reveal-modal a.btn-facebook-share {
 	display: block;
+	position: relative;
 	background-image: url(../img/btn-fb-share.png);
 	background-position: 0 0;
 	background-repeat: no-repeat;
 	width: 55px;
 	height: 52px;
 	text-indent: -9999px;
-	margin: 10px 40px 10px;
+	margin: 25px 0 0;
+	float: left;
 }
 
 .reveal-modal a.btn-facebook-share span {
@@ -911,14 +920,14 @@ h4.cooper {
 }
 .reveal-modal a.btn-close.close-reveal-modal {
 	display: block;
+	position: relative;
 	background-image: url(../img/btn-keep-voting.png);
 	background-position: 0 0;
 	background-repeat: no-repeat;
 	width: 270px;
 	height: 84px;
 	text-indent: -9999px;
-	position: relative;
-	margin: -15px 0 0 -20px;
+	margin: -20px 0 0 70px;
 }
 .reveal-modal a.btn-close.close-reveal-modal:hover {
 	background-position: 0 -83px;
@@ -1237,7 +1246,7 @@ h4.cooper {
 	}
 
 	.form {
-		padding-top: 10px;
+		padding-top: 0;
 	}
 	
 	.home form {
@@ -1252,7 +1261,7 @@ h4.cooper {
 		height: inherit;
 	}
 	.vs span {
-		margin: 0 auto;
+		margin: 0 auto 5px auto;
 		width: 39px;
 		height: 22px;
 		background-image: url(../img/mob/versus.png);
@@ -1288,7 +1297,8 @@ h4.cooper {
 		display: block;
 		margin: auto;
 		position: absolute;
-		left: 60px;
+		left: 50%;
+		margin-left: -99px;
 		top: 0px;
 	}
 	
@@ -1296,8 +1306,15 @@ h4.cooper {
 		position: relative;
 		top: 70px;
 		margin: 0 auto;
-		width: 100%;
 		text-align: center;
+	}
+	
+	.au footer .links {
+		width: 250px;
+	}
+	
+	.nz footer .links {
+		width: 280px;
 	}
 	
 	footer a.terms {
@@ -1330,11 +1347,26 @@ h4.cooper {
 		width: 200px;
 		height: 184px;
 	}
+	
 	#win-modal .prize-image img {
 		width: 200px;
 		height: 184px;
 	}
+	
+	.reveal-modal h4 {
+		margin-right: 10px;
+	}
 
+	.reveal-modal a.btn-facebook-share {
+		float: none;
+		left: 30%;
+		margin-left: 0;
+	}
+
+	.reveal-modal a.btn-close.close-reveal-modal {
+		margin-left: 0px;
+	}
+	
 	.vote-count {
 		width: 114px;
 		height: 33px;
@@ -1358,16 +1390,16 @@ h4.cooper {
 		text-overflow: ellipsis;
 	}
 	
-	.vert span.file-input-name {
-		margin-top: 150px;
-		margin-left: 35px;
+	.horz span.file-input-name {
+		margin-top: 110px;
+		margin-left: 0;
 		width: 200px;
 	}
 
 	.vert span.file-input-name {
-		margin-top: 150px;
-		margin-left: 15px;
-		width: 140px;
+		margin-top: 110px;
+		margin-left: 0px;
+		width: 120px;
 	}
 
 	/* the picture frames */
